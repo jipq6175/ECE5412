@@ -15,7 +15,7 @@ end
 function arv(n::Signed)
     x = zeros(n);
     c = 5;
-    for i = i:n
+    for i = 1:n
         while true
             u = rand(2);
             if u[1] < u[2]^(c - 1)
@@ -35,4 +35,6 @@ histogram(x)
 
 histogram(y)
 
-histogram(z)
+histogram(z, normalize=true)
+v = collect(0.0:0.001:1.0);
+plot!(v, 5*v.^4, lw=3.0)
