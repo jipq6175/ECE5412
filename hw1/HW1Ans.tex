@@ -1,0 +1,229 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage{comment} % enables the use of multi-line comments (\ifx \fi) 
+\usepackage{fullpage} % changes the margin
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+
+
+\begin{document}
+\noindent
+\large\textbf{Homework 1} \hfill \textbf{Yen-Lin Chen} \\
+\normalsize ECE 5412 \hfill yc2253@cornell.edu \\
+Fall 2019 \hfill Due: 09/31/19\\
+
+
+
+
+
+\section*{Problem 17}
+
+The CDF is given as 
+
+\begin{equation}
+F(x)= 
+\begin{cases}
+    \frac{1-e^{-2x}+2x}{3},& \text{if } 0 < x \leq 1\\
+    \frac{3-e^{-2x}}{3},& \text{if } 1 < x < \infty
+\end{cases}
+\end{equation}
+
+The PDF is the following: 
+
+\begin{equation}
+f(x)= 
+\begin{cases}
+    \frac{2}{5}(e^{-2x}+2),& \text{if } 0 < x \leq 1\\
+    \frac{2}{5}e^{-2x},& \text{if } 1 < x < \infty
+\end{cases}
+\end{equation}
+
+First we need to generate a random variable that spans the positive real axis. We apply the exponential distribution as a known distribution $q(x) = e^{-x}$ and use acceptance-rejection method to generate the desired distribution using the PDF in Eq. (2). 
+\begin{enumerate}
+	\item Generate $q(y)$ by using $y = -\log{u}$ where $u \sim U[0,1]$. 
+	\item Determine the constants $c_1$ and $c_2$ for first and second conditions. 
+	\begin{equation}
+		c_1 = \max_{0<t\leq 1} \frac{f(t)}{q(t)} = \frac{4e}{5(e-1)}\sqrt{2}
+	\end{equation}
+	\begin{equation}
+		c_2 = \max_{1<t<\infty} \frac{f(t)}{q(t)} = \frac{2}{5}
+	\end{equation}
+	We can choose $c = \max(c_1, c_2)$ for both conditions. 
+	\item Generate $u_2 \sim U[0,1]$ and set $x = y$ if the following holds
+	\begin{equation}
+		u_2 < \frac{f(y)}{cq(y)}
+	\end{equation}
+	otherwise go back to step one. 
+\end{enumerate}
+
+We generated $n = 1000000$ random samples and plotted the cumulative histogram for the samples as shown in Fig. 1. 
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=4in]{q17.png}
+		\caption{Problem 17: The cumulative histogram of $n=100000$ samples and the real CDF as in Eq. (1).}
+	\end{center}
+\end{figure}
+
+
+
+
+
+\section*{Problem 20}
+
+We would like to generate random variables from CDF: 
+\begin{equation}
+	F(x) = \prod_{i=1}^n F_i(x)
+\end{equation}
+where $F_i(x)$'s are known and easy to generate. From Eq. (6), we have the following
+\begin{equation}
+\begin{split}
+F(t) & = P(x \leq t) = \prod_{i=1}^n F_i(x) \\
+ & = \prod_{i=1}^n P(x_i \leq t) = P(\max_i x_i \leq t)
+\end{split}
+\end{equation}
+The CDF in Eq. (6) is the distribution of $\max_i x_i$ where $x_i \sim F_i(x_i)$. Therefore we can use the following steps to generate $F(x)$. 
+
+\begin{enumerate}
+	\item generate $u \sim U[0, 1]$
+	\item use $u$ to generate $x_i$'s based on the corresponding CDFs $F_i$'s. 
+	\item set $x = \max_i x_i$ 
+\end{enumerate}
+
+
+
+\section*{Problem 26}
+
+The second-order transition probability $P(X_{k+1}|X_k, X_{k-1})$ where $P: {S \bigotimes  S^2} \to [0, 1]$. $S$ is the state space of the discrete Markov Chain. And we have 
+\begin{equation}
+\sum_{X_{k-1}\in S}\sum_{X_k\in S} P(X_{k+1}|X_k, X_{k-1}) = 1
+\end{equation}
+
+The transition probability $P(X_{k+1}|X_k, X_{k-1})$ can be re-written as
+
+\begin{equation}
+P(X_{k+1}|X_k, X_{k-1}) = P(X_{k+1}, X_k|X_k, X_{k-1})
+\end{equation}
+since it is conditioned on $X_k$. Now the transition probability can be viewed as a first order on the new expanded state space: $S^2$, i.e. $P: {S^2 \bigotimes  S^2} \to [0, 1]$. Moreover, we have 
+
+\begin{equation}
+\begin{split}
+\sum_{\{X_k, X_{k-1}\}\in S^2} P(X_{k+1}, X_k|X_k, X_{k-1}) & = \sum_{X_{k-1}\in S}\sum_{X_k\in S} P(X_{k+1}, X_k|X_k, X_{k-1}) \\
+ & = \sum_{X_{k-1}\in S}\sum_{X_k\in S} P(X_{k+1}|X_k, X_{k-1})\\
+ & = 1
+\end{split}
+\end{equation}
+Therefore, a second-order Markov Chain can be expressed as a first-order Markov Chain on the expanded state space: $S^2$. 
+
+
+\section*{Problem 27}
+
+
+
+
+\section*{Problem 28}
+
+Without lost of generality, assume the 2-state transition probability is of the following form. 
+\begin{equation}
+P = \begin{bmatrix}
+1-a & a \\
+b & 1-b
+\end{bmatrix}
+\end{equation}
+where $0 \leq a, b \leq 1$. With the stationary distribution $\pi_\infty$ satisfying 
+\begin{equation}
+\pi_\infty = P' \pi_\infty = \frac{1}{a+b}\begin{bmatrix}
+b \\
+a
+\end{bmatrix}
+\end{equation}
+Therefore, $\pi_\infty$ is the eigenvector of $P'$ corresponding to eigenvalue $1$. The other eigenvalue is $1-a-b$ corresponding to the eigenvector $[1, -1]'$. Given an arbitrary starting probability distribution 
+\begin{equation}
+\pi_0 = \begin{bmatrix}
+c \\
+1-c
+\end{bmatrix} = \frac{1}{a+b}\begin{bmatrix}
+b \\
+a
+\end{bmatrix} + \left(c - \frac{b}{a+b} \right)\begin{bmatrix}
+1 \\
+-1
+\end{bmatrix} = \pi_\infty + \left(c - \frac{b}{a+b} \right)\begin{bmatrix}
+1 \\
+-1
+\end{bmatrix}
+\end{equation}
+where $0 \leq c \leq 1$. Therefore, $\pi_k = (P')^k \pi_0$
+\begin{equation}
+\begin{split}
+\pi_k & = (P')^k \pi_0 \\ 
+ & = \pi_\infty + (1-a-b)^k\left(c - \frac{b}{a+b} \right)\begin{bmatrix}
+1 \\
+-1
+\end{bmatrix}
+\end{split}
+\end{equation}
+Therefore, $\pi_k$ converges to $\pi_\infty$ geometrically fast in terms of the second largest eigenvalue $1-a-b$.  There are a few situations to consider. 
+\begin{enumerate}
+	\item $a$
+\end{enumerate}
+
+\section*{Problem 30}
+
+Assuming that $i \neq j$, we can remove state $j$ from the state space of the Markov Chain because we want to make sure that for time $k = 1, 2, 3 \dots n-1$, the chain does not visit state $j$. The new transition probability is now $R \in \mathbb{R}^{(n-1)\times (n-1)}$ with the $j$\textsuperscript{th} row and column removed. Moreover, we define the $P_{i\neq j, j} \in \mathbb{R}^{n-1}$ as the transition probability from state $i\neq j$ to state $j$. The starting state is $x_0 = i$, corresponding to a one-hot vector $\pi_0 \in \mathbb{R}^{n-1}$ with the $i$\textsuperscript{th} element equal to $1$. Let's list some of the quantities to see the underlying rules. 
+\begin{equation}
+P(x_1 = j | x_0 = i) = P_{ij} = P_{i\neq j, j}' \pi_0 = P_{i\neq j, j}' I \pi_0 
+\end{equation}
+
+\begin{equation}
+P(x_2 = j, x_1 \neq j | x_0 = i) = P_{i\neq j, j}' R' \pi_0
+\end{equation}
+
+\begin{equation}
+P(x_3 = j, x_2 \neq j, x_1 \neq j | x_0 = i) = P_{i\neq j, j}' (R')^2 \pi_0
+\end{equation}
+
+Therefore, we have 
+\begin{equation}
+P(x_n = j, x_{n-1} \neq j, \dots, x_1 \neq j | x_0 = i) = P_{i\neq j, j}' (R')^{n-1} \pi_0
+\end{equation}
+The probability of ending up in state $j$ given starting at state $i$ is then 
+\begin{equation}
+\begin{split}
+p_{i\to j} & = \sum_{n=1}^{\infty} P(x_n = j, x_{n-1} \neq j, \dots, x_1 \neq j | x_0 = i)\\
+ & = \sum_{n=1}^{\infty} P_{i\neq j, j}' (R')^{n-1} \pi_0 \\
+ & = P_{i\neq j, j}' \left[ \sum_{n=1}^{\infty} (R')^{n-1} \right]\pi_0 \\
+ & = P_{i\neq j, j}' (I - R')^{-1} \pi_0
+\end{split}
+\end{equation}
+where $I$ is the identity matrix. The time it takes for the first visit of state $j$ given starting at state $i$, $T_{ij}$ is
+\begin{equation}
+\begin{split}
+T_{ij} & = \sum_{n=1}^{\infty} n P(x_n = j, x_{n-1} \neq j, \dots, x_1 \neq j | x_0 = i)\\
+ & = \sum_{n=1}^{\infty} P_{i\neq j, j}' n(R')^{n-1} \pi_0 \\
+ & = P_{i\neq j, j}' \left[ \sum_{n=1}^{\infty} n(R')^{n-1} \right] \pi_0 \\
+ & = P_{i\neq j, j}' \left[ (I - R')^{-1} \right]^2 \pi_0
+\end{split}
+\end{equation}
+
+
+\section*{Problem 33}
+
+
+
+
+
+
+
+
+\section*{Attachments}
+	\textit{hw1.jl}
+
+%\begin{thebibliography}{9}
+%\bibitem{Robotics} Fred G. Martin \emph{Robotics Explorations: A Hands-On Introduction to Engineering}. New Jersey: Prentice Hall.
+%\bibitem{Flueck}  Flueck, Alexander J. 2005. \emph{ECE 100}[online]. Chicago: Illinois Institute of Technology, Electrical and Computer Engineering Department, 2005 [cited 30
+%August 2005]. Available from World Wide Web: (http://www.ece.iit.edu/~flueck/ece100).
+%\end{thebibliography}
+
+\end{document}
