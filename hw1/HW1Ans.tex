@@ -164,10 +164,13 @@ where $0 \leq c \leq 1$. Therefore, $\pi_k = (P')^k \pi_0$
 \end{bmatrix}
 \end{split}
 \end{equation}
-Therefore, $\pi_k$ converges to $\pi_\infty$ geometrically fast in terms of the second largest eigenvalue $1-a-b$.  There are a few situations to consider. 
+Therefore, $\pi_k$ converges to $\pi_\infty$ geometrically fast in terms of the second largest eigenvalue $1-a-b$. $\forall a,b$ satisfying $0 < a, b < 1$, $0 \leq |1-a-b| < 1$. There are a few situations to consider when $|1-a-b| = 1$. 
 \begin{enumerate}
-	\item $a$
+	\item $a=b=1$: the chain is periodic, $\pi_\infty$ does not exist unless $c=\frac{1}{2}$. 
+	\item $a=b=0$: $P=I$ so $\pi_0 = \pi_\infty$.
 \end{enumerate}
+
+For a Markov Chain with three states, we can randomly generate the transition probability $P$ and do a numerical experiment. 
 
 \section*{Problem 30}
 
