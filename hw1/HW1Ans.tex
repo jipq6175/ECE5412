@@ -170,7 +170,19 @@ Therefore, $\pi_k$ converges to $\pi_\infty$ geometrically fast in terms of the 
 	\item $a=b=0$: $P=I$ so $\pi_0 = \pi_\infty$.
 \end{enumerate}
 
-For a Markov Chain with three states, we can randomly generate the transition probability $P$ and do a numerical experiment. 
+For a Markov Chain with three states, we can randomly generate the transition probability $P$ and do a numerical experiment. For a state space $S = \{1, 2, 3\}$ with state vector $s = [1, 2, 3]'$, we calculate the stationary average $\mu = s'\pi_\infty$. We initialize a random initial state $\pi_0$ and we have $\pi_n = (P')^n\pi_0$. We compute the difference between the average at time $n$ and stationary average: 
+
+\begin{equation}
+d_n = |s'(\pi_\infty - \pi_n)|
+\end{equation}
+And we demonstrate that the difference $d_n$ converges geometrically fast in terms of $|\lambda_2|$: $d_n \sim \mathcal{O}(|\lambda_2|^n)$ as shown in Fig. 2. 
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=4in]{q28.png}
+		\caption{Problem 28: The convergence of $d_n$ is geometrically fast in terms of $|\lambda_2|$. }
+	\end{center}
+\end{figure}
 
 \section*{Problem 30}
 
