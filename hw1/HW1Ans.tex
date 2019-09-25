@@ -285,7 +285,7 @@ We start by randomly generate the transition probability matrix $A$ and $\pi_k$ 
 \pi_{k+1} = A'\pi_k \approx \pi^*_{k+1} = \frac{1}{M}\sum_{m=1}^M A'(i_m, :)
 \end{equation} 
 
-We are interested in the estimation error between $\pi_{k+1}$ and $\pi^*_{k+1}$ so we use the L1-norm of their difference as a metric for the accuracy of the estimation: $||\pi^*_{k+1} - \pi_{k+1}||_1$. We use 100 different $M$ values from $100$ to $10000$ and plot the error and the estimation time of Eq. (36) as shown on the left and right of Fig. 4 respectively. The error stabilizes for $M \leq 5000$ in our experiment. As expected, the estimation time is of linear complexity of $\mathcal{M}$. 
+We are interested in the estimation error between $\pi_{k+1}$ and $\pi^*_{k+1}$ so we use the L1-norm of their difference as a metric for the accuracy of the estimation: $||\pi^*_{k+1} - \pi_{k+1}||_1$. We use 100 different $M$ values from $100$ to $10000$ and plot the error and the estimation time of Eq. (26) as shown on the left and right of Fig. 4 respectively. The error stabilizes for $M \leq 5000$ in our experiment. As expected, the estimation time is of linear complexity of $\mathcal{M}$. 
 
 For the fastest estimation, $M=100$, the estimation time is $1.5$ ms while the computation time for $A'\pi_k$ is $0.693$ ms. Moreover, for $M=5000$ where the error converges, the estimation time is $27.5$ ms. All of the estimation time is greater than the computation time for direct product. This might be due to the fact that $N=1000$ here is not large enough to see the speeding up of the estimation. MATLAB uses their version of \textit{BLAS} which starts to see the significance of $\mathcal{O}(N^2)$ for matrix-vector product after $N>1e5$ according to my personal experience. 
 
@@ -293,7 +293,7 @@ For the fastest estimation, $M=100$, the estimation time is $1.5$ ms while the c
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=6in]{q33.png}
-		\caption{Problem 33: The L1-norm error between estimation and real $\pi_{k+1}$ (left) and the computation time of Eq. (36) using different $M$ values (right).  }
+		\caption{Problem 33: The L1-norm error between estimation and real $\pi_{k+1}$ (left) and the computation time of Eq. (26) using different $M$ values (right).  }
 	\end{center}
 \end{figure}
 
