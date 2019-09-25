@@ -2,6 +2,7 @@
 \usepackage{comment} % enables the use of multi-line comments (\ifx \fi) 
 \usepackage{fullpage} % changes the margin
 \usepackage{graphicx}
+\usepackage{subfigure}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 
@@ -119,9 +120,60 @@ Therefore, a second-order Markov Chain can be expressed as a first-order Markov 
 
 \section*{Problem 27}
 
+\subsection*{(a)}
+
+The implementation of inverse transform algorithm is the combination of the MATLAB function \textit{inverse\_transform$(a,b)$} and \textit{$itmc(n)$} where $P(state 1) = a$ and $P(state 1 || state 2) = b$ is the CDF. $n$ is the number of generated samples, i.e. $n=500$. The histogram of the generated samples is shown in the left plot of Fig. 2 with stationary distribution indicated by the red dots. 
+
+\subsection*{(b)}
+
+The implementation of the acceptance rejection algorithm is the combination of the MATLAB function \textit{acceptance\_rejection$(a,b)$} and \textit{$armc(n)$} using the same notation as in (a). The histogram of the generated samples is shown in the middle plot of Fig. 2 with stationary distribution indicated by the red dots. 
 
 
+\subsection*{(c)}
 
+With the empirical sequence of the Markov Chain: $(1222231331 \dots)$, we can estimate the transition matrix $p$. We used the MATLAB function \textit{strfind} to look for a specific pattern in the sequence. The transition probability from $i \to j$ is then the number of occurrences of pattern $(i, j)$ divided by number of occurrences of $(i)$, i.e.
+
+\begin{equation}
+p_{ij} = \frac{\#(i, j)}{\#(i)}
+\end{equation}
+
+The implementation is the MATLAB function \textit{estimatemc(x)} where $x$ is the sequence of the empirical samples.
+
+The empirical transition matrix $p$ is found to be the following and different sampling might result in slightly different $p$. 
+
+\begin{equation}
+p = \begin{bmatrix}
+0.1833 & 0.3833 & 0.4333 \\
+0.1209 & 0.8791 & 0.0000 \\
+0.0896 & 0.1045 & 0.8060
+\end{bmatrix}
+\end{equation}
+
+\subsection*{(d)}
+
+With the transition matrix $p$ we can obtain the empirical stationary distribution as 
+\begin{equation}
+\pi^*_\infty = \begin{bmatrix}
+0.1200 & 0.6120 &0.2680
+\end{bmatrix}',
+\end{equation}
+
+while the real stationary distribution is 
+\begin{equation}
+\pi_\infty = \begin{bmatrix}
+0.1250 & 0.6250 &0.2500
+\end{bmatrix}',
+\end{equation}
+
+Both $\pi^*_\infty$ and $\pi_\infty$ are shown in the right plot of Fig. 2 in magenta circles and red dots respectively. Good agreement between empirical and real stationary distributions can be seen. 
+
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=7in]{q27.png}
+		\caption{Problem 27: 500 samples of the Marhov Chain using inverse transform (left) and acceptance-rejection (middle). The red dots represent the stationary distribution $\pi_\infty$ from the transition probability matrix $A$. The empirical estimator of a the transition matrix from the generated samples (right) where the magenta circles denotes the empirical stationary distribution $\pi^*_\infty$. }
+	\end{center}
+\end{figure}
 \section*{Problem 28}
 
 Without lost of generality, assume the 2-state transition probability is of the following form. 
@@ -131,7 +183,8 @@ P = \begin{bmatrix}
 b & 1-b
 \end{bmatrix}
 \end{equation}
-where $0 \leq a, b \leq 1$. With the stationary distribution $\pi_\infty$ satisfying 
+where $0 \leq a, b \leq 1$. With the stationary dist
+ribution $\pi_\infty$ satisfying 
 \begin{equation}
 \pi_\infty = P' \pi_\infty = \frac{1}{a+b}\begin{bmatrix}
 b \\
@@ -175,7 +228,7 @@ For a Markov Chain with three states, we can randomly generate the transition pr
 \begin{equation}
 d_n = |s'(\pi_\infty - \pi_n)|
 \end{equation}
-And we demonstrate that the difference $d_n$ converges geometrically fast in terms of $|\lambda_2|$: $d_n \sim \mathcal{O}(|\lambda_2|^n)$ as shown in Fig. 2. 
+And we demonstrate that the difference $d_n$ converges geometrically fast in terms of $|\lambda_2|$: $d_n \sim \mathcal{O}(|\lambda_2|^n)$ as shown in Fig. 3. 
 
 \begin{figure}
 	\begin{center}
@@ -233,7 +286,7 @@ T_{ij} & = \sum_{n=1}^{\infty} n P(x_n = j, x_{n-1} \neq j, \dots, x_1 \neq j | 
 
 
 \section*{Attachments}
-	\textit{hw1.jl}
+	\textit{CDF.m, PDF.m, generate.m, q17.m, q28.m}
 
 %\begin{thebibliography}{9}
 %\bibitem{Robotics} Fred G. Martin \emph{Robotics Explorations: A Hands-On Introduction to Engineering}. New Jersey: Prentice Hall.
