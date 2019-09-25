@@ -1,0 +1,40 @@
+% q33
+
+
+N = 1000; 
+A = rand(N);
+A = bsxfun(@rdivide, A, sum(A, 2)); 
+pik = rand(N, 1); 
+pik = pik / sum(pik); 
+
+
+tic();
+pik1 = A' * pik;
+t = toc();
+
+
+m = linspace(100, 10000, 100); 
+tm = [];
+var = [];
+
+for i = 1:100
+    M = m(i);
+    im = zeros(M, 1);
+    
+    % generate random variables
+    for j = 1:M
+        im(j) = acc_rej(pik);
+    end
+    
+    B = A';
+    
+    tic();
+    estimator = mean(B(im, :), 1);
+    tmp = toc();
+    
+    tm = [tm tmp]; 
+    
+    var = [var norm(estimator' - pik1, 1)];
+    
+end
+
