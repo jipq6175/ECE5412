@@ -300,16 +300,29 @@ For the fastest estimation, $M=100$, the estimation time is $1.5$ ms while the c
 
 \section*{Problem 34}
 
+In this problem, we use the Standard \& Poor 500 (S\&P500) Index from 2014/9/24 to 2019/9/24 to compute the return for different time periods. The stock market data was obtained from \textit{Yahoo Finance} with data frequency of one day and is shown in the first plot of Fig. 5. The log return at time $k$ is 
+
+\begin{equation}
+r_k = \log \left( \frac{p_k}{p_{k-1}} \right)
+\end{equation}
+where $p_k$ and $p_{k-1}$ are the stock price at time $k$ and $k-1$ respectively. We tested 8 different periods: 1 day, 3 days, 1 week, 2 weeks, 1 month, 1 season, 1 year and 2 years. The returns are plotted in percentage and fit by a normal distribution as shown in the panels of Fig. 5. We performed the one-sample Kolmogorov-Smirnov test by using the \textit{kstest} function in MATLAB. The \textit{p}-values are reported in the titles. In general, the \textit{kstest} suggests that non of the return distributions is normal. 
+
+An interesting point is that the mean of the short-period return is zero for periods less than a month. Long-term returns have positive means which might due to the bouncing-back from the slump in February 2017. 
 
 
-
-
+\begin{figure}
+	%\begin{left}
+		\includegraphics[width=7in]{q34.png}
+		\caption{Problem 34: The S\&P 500 Index and the return distributions from 8 different time periods where the x-axis is the percentage and y-axis is the probability density. }
+	%\end{left}
+\end{figure}
 
 \section*{Attachments}
 	Problem 17: \textit{CDF.m, PDF.m, generate.m, q17.m} \\
 	Problem 27: \textit{acceptance\_rejection.m, armc.m, inverse\_transform.m, itmc.m, estimatemc.m, q27.m}\\
 	Problem 28: \textit{q28.m}\\
 	Problem 33: \textit{acc\_rej.m, q33.m}\\
+	Problem 34: \textit{sp5ydaily.csv, getreturns.m, q34.m}\\
 
 %\begin{thebibliography}{9}
 %\bibitem{Robotics} Fred G. Martin \emph{Robotics Explorations: A Hands-On Introduction to Engineering}. New Jersey: Prentice Hall.

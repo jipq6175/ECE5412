@@ -10,5 +10,6 @@ for i = 1:m
     modified_close(i) = cl(i + period - 1); 
 end
 
-result = (modified_close - modified_open) ./ modified_open;
+%result = (log(modified_close) - log(modified_open)) ./ log(modified_open);
+result = (log(modified_close) - log(modified_open));
 end
