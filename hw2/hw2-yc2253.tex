@@ -1,0 +1,132 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage{comment} % enables the use of multi-line comments (\ifx \fi) 
+\usepackage{fullpage} % changes the margin
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+
+
+\begin{document}
+\noindent
+\large\textbf{Homework 2} \hfill \textbf{Yen-Lin Chen} \\
+\normalsize ECE 5412 \hfill yc2253@cornell.edu \\
+Fall 2019 \hfill Due: 10/30/19\\
+
+
+
+\section*{Problem 37}
+
+The AR2 model
+
+\begin{equation}
+y_k = -a_iy_{k-1}-a_2y_{k-2} + w_k 
+\end{equation}
+has the transfer function:
+
+\begin{equation}
+\frac{Y(z^{-1})}{U(z^{-1})} = \frac{z}{z^2+a_1z+a_2} 
+\end{equation}
+
+This model is stationary if the roots of $z^2+a_1z+a_2$ are in the unit circle of the complex plane, i.e. $|z_r| < 1$ where
+
+\begin{equation}
+z_r = \frac{-a_1}{2} \pm \frac{1}{2}\sqrt{a_1^2-4a_2}
+\end{equation} 
+
+First, consider the case where $a_1^2 < 4a_2$ and $z_r$ is complex. 
+
+\begin{equation}
+|z_r|^2 < 1 \iff \frac{a_1^2}{4} + \left(-\frac{a_1^2}{4} +a_2 \right) < 1 \iff a_2 < 1
+\end{equation}
+
+Second, consider the case where $a_1^2 > 4a_2$ and $x_r$ is real. 
+
+\begin{equation}
+|z_r| < 1 \iff \frac{-a_1}{2} + \frac{1}{2}\sqrt{a_1^2-4a_2} < 1 \quad \text{and} \quad \frac{-a_1}{2} - \frac{1}{2}\sqrt{a_1^2-4a_2} > -1
+\end{equation}
+
+\begin{equation}
+|z_r| < 1 \iff a_1+a_2+1>0 \quad \text{and} \quad a_1-a_2-1<0
+\end{equation}
+
+The possible values of $a_1$ and $a_2$ are shown in Fig. 1 as the colored areas, where the blue and magenta regions correspond to complex and real poles respectively. 
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=4in]{p37.png}
+		\caption{Problem 37: The stability triangle of the AR2 model. The blue and magenta areas correspond to complex and real poles respectively.}
+	\end{center}
+\end{figure}
+
+
+
+\section*{Problem 38}
+Choose $a_1 = -1.2$ and $a_2=0.7$ and the AR2 model is now
+\begin{equation}
+y_k = 1.2y_{k-1} - 0.7y_{k-2} + w_k
+\end{equation}
+with $y_0 = y_1 = 0$. We simulate 1000 observations of the system and compute the recursive least square (RLS) estimator for $a_1$ and $a_2$ using $Y = \Psi \theta + \epsilon$, where $Y = (y_3, y_4, \dots, y_{1002})'$, $\theta = (a_1, a_2)'$ and $\epsilon_i \sim N(0, I)$ iid. The trace is shown in the left plot of Fig. 2. The regression matrix $\Psi$ is the following
+
+\begin{equation}
+\Psi = \begin{bmatrix}
+y_2 & y_1 \\
+y_3 & y_4 \\ 
+\vdots & \vdots\\
+y_{1001} & y_{1000}
+\end{bmatrix}
+\end{equation}
+Then, $\hat{\theta} = (\hat{a_1}, \hat{a_2})' = (\Psi' \Psi)^{-1} \Psi' Y$. We run 100 times of this estimation process to get the statistics of the estimators. The histograms of $\hat{a_1}$ and $\hat{a_2}$ are shown in the middle and right plots of Fig. 2. Using 100 simulations, we obtain $E[\hat{a_1}] = -1.1965$ with std $0.0221$ and $E[\hat{a_2}] = 0.7001$ with std $0.0219$. 
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.5in]{p38.png}
+		\caption{Problem 38: (left) The trace of one simulation of 1000 observations using $a_1 = -1.2$, $a_2=0.7$ with $y_0 = y_1 = 0$. (middle) The histogram of $\hat{a_1}$. (right) The histogram of $\hat{a_2}$ from 100 simulations. }
+	\end{center}
+\end{figure}
+
+To explore the effect of starting states $y_0$ and $y_1$, we fix $y_0=0$ and vary $y_1$ from $1$ to $1000$ and repeat the aforementioned process to compute the RLS estimators. The traces of $y_1 = 300, 600, 900$ are shown in Fig. 3 and $\hat{a_1}$ and $\hat{a_2}$ traces are shown in the bottom right plot of Fig. 3. The AR2 system stabilizes within 100 observations. In general, the RLS estimation works well, resulting in precise estimators of $a_1$ and $a_2$. However, we observe (relatively) larger estimation errors for $y_1 < 100$. For larger input difference, it propagates longer into the system so we have a better estimation of the parameters whereas smaller input difference disappears fast and the system is dominated by Gaussian noises later on. 
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.5in]{p38b.png}
+		\caption{Problem 38: The effect of initial states. }
+	\end{center}
+\end{figure}
+
+
+ 
+
+\section*{Problem 39}
+
+
+
+
+\section*{Problem 43}
+
+
+
+\section*{Problem 46}
+
+
+
+
+
+\section*{Problem 47}
+
+
+
+
+
+
+
+
+
+
+\section*{Attachments}
+	
+
+
+
+\end{document}
