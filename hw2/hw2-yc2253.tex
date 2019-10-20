@@ -100,6 +100,37 @@ To explore the effect of starting states $y_0$ and $y_1$, we fix $y_0=0$ and var
 
 \section*{Problem 39}
 
+The Akaike information criterion (AIC) is defined as 
+\begin{equation}
+\text{AIC} = -2\log{\hat{L}} + 2k
+\end{equation}
+where $k$ is the number of estimated parameters in the model and $\hat{L}$ is the maximum likelihood. Using the same notation, the Bayesian information criterion (BIC) is defined similarly, 
+\begin{equation}
+\text{BIC} = -2\log{\hat{L}} + (\log{n})2k
+\end{equation}
+where $n$ is the number of data points. The AIC for the ARMA model with parameter $p$ (order of AR, i.e. number of $a_i$'s), $q$ (order of MA, i.e. number of $b_i$'s) is 
+\begin{equation}
+\text{AIC}(arma(p,q)) = \log{(\hat{\sigma}^2(p,q))} + \frac{2(p+q)}{n}
+\end{equation}
+Similarly, for the BIC, 
+\begin{equation}
+\text{BIC}(arma(p,q)) = \log{(\hat{\sigma}^2(p,q))} + \frac{2(p+q)\log{n}}{n}
+\end{equation}
+where $\hat{\sigma}^2(p,q)$ is the variance of the residuals of the fitted ARMA model.
+\begin{equation}
+\hat{\sigma}^2(p,q) = \text{var}(Y - \hat{Y}) = \text{var}\left\{ \left[ I_{p+q} - \Psi (\Psi ' \Psi)^{-1} \Psi ' \right]Y \right\}
+\end{equation}
+
+In our case of AR model, $q = 0$. We simulate $n = 1002$ from an AR2 model using $a_1 = -1.2$ and $a_2=0.7$ with $y_0 = y_1 = 0$. The simulated data is shown in the top left panel of Fig. 3. We apply the RLS estimation for AR-k model where $k \in \{1,2,\dots, 300 \}$ and compare the AIC and BIC for all the models. We show the traces of residuals of AR-2 (middle left) and AR-100 models (bottom left) in Fig. 3.  
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.5in]{p39.png}
+		\caption{Problem 39: (top left) The simulated data from an AR-2 system using $a_1 = -1.2$ and $a_2=0.7$ with $y_0 = y_1 = 0$. The traces of the residuals (middle left) using the AR-2 model and (bottom left) AR-100 model for RLS estimation. The panels on the right show the $\hat{\sigma}^2$, AIC and BIC of the AR-k models with the lowest value indicated as "x" which is the AR-1 model. }
+	\end{center}
+\end{figure}
+
+Using the same simulated data, we estimated the AR-k parameters using RLS method. The variance of the residuals, the AIC and BIC are plotted in the right column of Fig. 3. We label the lowest value with "x" which turns out to be from the AR-1 model. Therefore, by AIC and BIC, the order of AR model is 1. 
 
 
 

@@ -27,7 +27,7 @@ ylabel('a_2');
 a1 = -1.2;
 a2 = 0.7;
 y0 = 0.0;
-y1 = 100.0; 
+y1 = 0.0; 
 n = 1000; 
 y = ar2simulate(y0, y1, a1, a2, n);
 
@@ -118,5 +118,65 @@ plot(a2i, 'b.');
 xlabel('y_1')
 ylabel('a_2')
 
+
+%% p39
+a1 = -1.2;
+a2 = 0.7;
+y0 = 0.0;
+y1 = 0.0; 
+n = 1000; 
+y = ar2simulate(y0, y1, a1, a2, n);
+%%
+figure(1)
+subplot(3,2,1)
+plot(y)
+title('simulated data')
+xlim([0 1000]);
+
+subplot(3,2,3)
+plot(arestimate(y, 2))
+title('AR2 residuals')
+xlim([0 1000]);
+ylim([-10 10]);
+xlabel('step')
+
+
+subplot(3,2,5)
+plot(101:1002, arestimate(y, 100))
+title('AR 100 residuals')
+xlim([0 1000]);
+ylim([-10 10]);
+xlabel('step');
+
+aic = zeros(100,1);
+bic = zeros(100,1);
+v = zeros(100,1);
+for k = 1:300
+    res = arestimate(y, k);
+    v(k) = var(res);
+    aic(k) = log(v(k)) + 2*k/(n+2-k);
+    bic(k) = log(v(k)) + 2*k * log(n+2-k)/(n+2-k);
+end
+
+subplot(3,2,2)
+plot(v, 'b.'); 
+hold on;
+plot([1], v(1), 'bx', 'MarkerSize', 10, 'LineWidth', 5.0)
+title('variance of residuals');
+xlabel('k');
+
+subplot(3,2,4)
+plot(aic, 'r.'); 
+hold on;
+plot([1], aic(1), 'rx', 'MarkerSize', 10, 'LineWidth', 5.0)
+title('AIC');
+xlabel('k');
+
+subplot(3,2,6)
+plot(v, 'g.'); 
+hold on;
+plot([1], bic(1), 'gx', 'MarkerSize', 10, 'LineWidth', 5.0)
+title('BIC');
+xlabel('k');
 
 
