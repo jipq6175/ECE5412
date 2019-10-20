@@ -138,9 +138,106 @@ Using the same simulated data, we estimated the AR-k parameters using RLS method
 
 
 
+
+
 \section*{Problem 46}
+The stochastic least square problem $Y = \Psi \theta + \epsilon$ where $\epsilon\sim N_N(0, \sigma^2I_N)$ has the estimator $\theta_*$: 
+\begin{equation}
+\theta_* = (\Psi ' \Psi)^{-1} \Psi ' Y 
+\end{equation}
+The estimator for noise variance $\hat{\sigma}^2$ is
+\begin{equation}
+\hat{\sigma}^2 = \frac{1}{N-n}(Y - \Psi\theta_*)'(Y - \Psi\theta_*)
+\end{equation}
+Plugging $\theta_*$ using Eq. (14). 
+\begin{equation}
+\hat{\sigma}^2 = \frac{1}{N-n}\left[(I - \Psi (\Psi ' \Psi)^{-1} \Psi ')Y \right]' \left[(I - \Psi (\Psi ' \Psi)^{-1} \Psi ')Y \right] = \frac{1}{N-n} (HY)'HY
+\end{equation}
+where $H = I - \Psi (\Psi ' \Psi)^{-1} \Psi '$ is symmetric and idenpotent ($H^2 = H$) and $\text{rank}(H) = \text{tr}(H) = N-n$. Define $Z = HY$. $\hat{\sigma}^2 = \frac{1}{N-n}Z'Z$.
+\begin{equation}
+\text{Cov}(Z) = H(\sigma^2 I)H' = \sigma^2 H
+\end{equation}
+\begin{equation}
+E[\hat{\sigma}^2] = \frac{1}{N-n}E[Z'Z] = \frac{1}{N-n}\text{tr}(\text{Cov}(Z)) = \frac{\sigma^2}{N-n}(N-n) = \sigma^2
+\end{equation}
+Therefore, $\hat{\sigma}^2$ is an unbiased estimator for $\sigma^2$. 
+
+By imposing $A\theta = 0$ where $A\in \mathbb{R}^{r\times n}$, we can rewrite the least square error with constraint by expanding the matrices as the following.
+\begin{equation}
+\begin{bmatrix}
+Y\\
+0_r
+\end{bmatrix} = \begin{bmatrix}
+\Psi \\
+A
+\end{bmatrix}\theta + \begin{bmatrix}
+\epsilon \\
+0_r
+\end{bmatrix}
+\end{equation}
+The LS estimator $\hat{\theta}$ is now 
+\begin{equation}
+\hat{\theta} = \left(\begin{bmatrix}
+\Psi' & A'
+\end{bmatrix}\begin{bmatrix}
+\Psi \\
+A
+\end{bmatrix} \right)^{-1} \begin{bmatrix}
+\Psi' & A'
+\end{bmatrix} \begin{bmatrix}
+Y \\
+0_r
+\end{bmatrix} = \left(\Psi'\Psi + A'A \right)^{-1}\Psi'Y
+\end{equation}
+
+We can replace $\theta_*$ in Eq. (15) with $\hat{\theta}$ from Eq. (20) can get the new estimation of $\sigma^2$: 
+\begin{equation}
+\hat{\sigma_c}^2 = \frac{1}{N-n}(Y-\Psi\hat{\theta})'(Y-\Psi\hat{\theta})
+\end{equation}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.0in]{p46.png}
+		\caption{Problem 46: (left) The trace of 1000 simulated $\hat{\sigma}^2$ without the constraint and the histogram. (right) The $\hat{\sigma_c}^2$ using Eq. (21) with respect to $r$. The error bar is the standard deviation of 1000 simulations of $\hat{\sigma_c}^2$. }
+	\end{center}
+\end{figure}
+
+We run the simulation by varying $r$ using $N=1000$, $n=10$ and $\sigma^2=1$. $r=0$ is the case where there is no constraint. We compute 1000 estimators of $\sigma^2$ by using different $\Psi$ to get good statistics of $\hat{\sigma}^2$. The trace and histogram are shown on the left of Fig. 6. We repeat the estimation of $\hat{\sigma_c}^2$ using Eq. (21) for different size of $A\in \mathbb{R}^{r\times n}$ and explore the effect of imposing the constraint. The $\hat{\sigma_c}^2$ is increasing with $r$ which suggests that $\hat{\sigma_c}^2$ is no longer unbiased because it fails to taking into account the constraint by matrix $A$. 
 
 
+Let $M = \left(\Psi'\Psi + A'A \right)^{-1}$. The residuals from the LS estimator $\hat{\theta}$ is 
+\begin{equation}
+r = \begin{bmatrix}
+Y\\
+0_r
+\end{bmatrix} - \begin{bmatrix}
+\Psi M \Psi'Y \\
+AM\Psi' Y
+\end{bmatrix} = \begin{bmatrix}
+(I - \Psi M \Psi') \\
+-AM\Psi' 
+\end{bmatrix}Y
+\end{equation}
+
+\begin{equation}
+\begin{split}
+r'r & = Y'\left[I - 2\Psi M\Psi' + \Psi M\Psi' \Psi M\Psi' + \Psi MA'A M\Psi' \right]Y \\
+& = Y'\left[I - 2\Psi M\Psi' + \Psi M(\Psi'\Psi + A'A)M\Psi' \right]Y \\
+& = Y'(I - \Psi M\Psi')Y \\
+& = Y' \left[I - \Psi\left(\Psi'\Psi + A'A \right)^{-1}\Psi' \right]Y
+\end{split}
+\end{equation}
+
+Notice that $I - \Psi\left(\Psi'\Psi + A'A \right)^{-1}\Psi'$ is not an idenpotent matrix and might have large singular values, $\sigma_i$, depending on matrix $A$. This is the effect we observe in Fig. 6 where the estimator $\hat{\sigma_c}^2$ can be roughly written as
+\begin{equation}
+\hat{\sigma_c}^2 \approx \sigma^2 C(r)\sum_{i=1}^n \sigma_i^2
+\end{equation}
+where $C(r)$ is a constant that depends on $r$. If $r = 0$, $\sigma_i = 1$ $\forall i \in \{1,2,\dots, N-n \}$. Therefore, 
+
+\begin{equation}
+\hat{\sigma}^2 = \sigma^2 C(0)\sum_{i=1}^{N-n} \sigma_i^2 = \sigma^2(N-n)C(0)
+\end{equation}
+We can set $C(0) = 1/(N-n)$ to make $\hat{\sigma}^2$ an unbiased estimator. 
 
 
 

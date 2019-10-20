@@ -180,3 +180,74 @@ title('BIC');
 xlabel('k');
 
 
+
+
+
+
+
+
+
+
+
+
+%% p46
+est = zeros(101, 1);
+esterr = zeros(101, 1);
+est2 = zeros(101, 1);
+esterr2 = zeros(101, 1);
+N = 500;
+n = 10;
+th = (1:n)' .* sign(randn(n, 1));
+
+% r = 0
+stat = zeros(1000, 1);
+for i = 1:1000
+X = 10.0 * rand(N, n) .* sign(randn(N, n)); 
+Y = X * th + randn(N, 1);
+r = Y - X * inv(X' * X) * (X' * Y); 
+stat(i) = sum(r.^2)/(N-n);
+end
+
+figure(1);
+subplot(4,2,[1 3 5])
+plot(stat, 1:1000, 'b.'); 
+title('\sigma^2 of 1000 simulations');
+xlim([0.8 1.2]);
+subplot(4,2,7)
+hist(stat);
+xlabel('\sigma^2');
+xlim([0.8 1.2]);
+
+
+est(1) = mean(stat);
+esterr(1) = std(stat);
+est2(1) = mean(stat);
+esterr2(1) = std(stat);
+
+stat2 = zeros(1000, 1);
+for rk = 1:100
+    A = 10 * rand(rk, n) .* sign(randn(rk, n));
+    for i = 1:1000
+    X = 10.0 * rand(N, n) .* sign(randn(N, n)); 
+    Y = X * th + randn(N, 1);
+    M = inv(X' * X + A' * A);
+    r = Y - X * M * (X' * Y); 
+    %r2 = - A * M * (X' * Y); 
+    stat(i) = sum(r.^2)/(N-n);
+    %stat2(i) = sum(r2.^2)/(N-n)/rk;
+    end
+
+est(rk+1) = mean(stat);
+esterr(rk+1) = std(stat);
+%est2(rk+1) = mean(stat2);
+%esterr2(rk+1) = std(stat2);
+end
+
+subplot(4,2,[2 4 6 8]);
+errorbar(0:100, est, esterr, 'r.');
+xlim([-5 100]);
+ylim([0, 500]); 
+xlabel('r');
+ylabel('\sigma^2'); 
+set(gca, 'yscale', 'log')
+grid on;
