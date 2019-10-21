@@ -136,9 +136,30 @@ Using the same simulated data, we estimated the AR-k parameters using RLS method
 
 \section*{Problem 43}
 
+The engine is modeled by a combination of non-linear input model and AR-1 response. 
+\begin{equation}
+y_n = a_1u_{n-1} + a_2u_{n-1}^2 + a_3y_{n-1} + w_n
+\end{equation}
+Our goal is to use the vector $u$ and $y$ to construct a online least square estimation of the parameters $a_i$'s. In the MATLAB Simulink, the parameter estimations are updated each step; however, in our attempt to reproduce the MATLAB result, we extract the data from the Simulink model and do the online estimation ourselves. 
 
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.0in]{p43.png}
+		\caption{Problem 43: (left) . }
+	\end{center}
+\end{figure}
 
+In the Simulink online LS estimation, there is a forgetting parameter, $\lambda=10^{-4}$, suggesting that the LS model only takes into account the latest historical data to make LS estimation. Since the input pulse has period of 10 seconds, we have to use past $t$ seconds responses where $t > 10$. In Simulink, $\lambda=10^{-4}$ corresponds to about $15$ seconds of past data and exponential weights are also applied. 
 
+On the other hand, in our attempt to make online LS estimation, we simply take past 15-second responses with equal weights to make estimation of $a_i$'s. Since the input pulse is a square wave, the regression matrix $\Psi$ might have linearly-dependent columns. The matrix $\Psi'\Psi$ might be close to singular matrix. We deal with such instability by using 
+\begin{equation}
+(\Psi'\Psi)^{-1} \approx (\Psi'\Psi + \epsilon^2 I)^{-1}
+\end{equation}
+where we set $\epsilon = 10^{-4}$. 
+
+The input pulse and output response are shown on the left plots of Fig. 5. The online LS estimations of $a_i$ from our simple estimation and from Simulink are shown on the right panel of Fig. 5. This engine system is designed to change inertia at $t=100$ s, which affects the $a_1$ value. In both our and Simulink estimations, the estimated values of $a_1$ change abruptly at $t=100$ s, which signals the change in the engine inertia. 
+
+The difference between our estimation and Simulink might be due to the followings, which can be improved for more precise estimation. First, we simply apply the past 15-second data to make online LS estimation. Using a forgetting parameter with longer data might improve the agreement. Second, we apply equal weights to the past data, which in real-life estimation can be improved by applying decaying weights to the past data. Finally, due to the equal weights, we are forced to apply $\epsilon^2 I$ to condition the $\Psi' \Psi$ matrix in case of close-to-singularity. However, if different weights are applied, $\Psi' \Psi$ will never be close to a singular matrix. Despite these simplifications in our online LS model estimation, we are still able to detect the change in $a_1$ at $t=100$ s. 
 
 \section*{Problem 46}
 The stochastic least square problem $Y = \Psi \theta + \epsilon$ where $\epsilon\sim N_N(0, \sigma^2I_N)$ has the estimator $\theta_*$: 
@@ -245,6 +266,7 @@ We can set $C(0) = 1/(N-n)$ to make $\hat{\sigma}^2$ an unbiased estimator.
 
 
 
+ 
 
 
 

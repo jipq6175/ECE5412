@@ -179,13 +179,41 @@ plot([1], bic(1), 'gx', 'MarkerSize', 10, 'LineWidth', 5.0)
 title('BIC');
 xlabel('k');
 
+%% p43
+n = size(u2, 1);
+a = zeros(n, 3);
+k = 1800; % 15 s estimator
+l = 1e-4;
+%w = diag(exp(-l * (k-1:-1:0)));
+for i = k+1:n
+    Y = y(i-k+1:i, 2); 
+    X = [u2(i-k:i-1, 2) u2(i-k:i-1, 2).^2 y(i-k:i-1, 2)];
+    
+    %estimate = inv(X' * (w * X) + 1e-8*eye(3)) * X' * (w * Y); 
+    estimate = inv(X' * X - 1e-8*eye(3)) * X' * Y; 
+    a(i, :) = estimate';
+end
+
+%%
+figure(1)
+subplot(4,2,1)
+plot(u2(:,1), u2(:,2), 'b-', 'LineWidth', 2.0);
+title('u: Input pulses');
+
+subplot(4,2,[3 5 7])
+plot(y(:,1), y(:,2), 'm-', 'LineWidth', 2.0);
+title('y: engine response');
+xlabel('t (s)');
 
 
-
-
-
-
-
+subplot(4,2,[2 4 6 8]);
+plot(u2(:,1), 2.5*a(:,1), 'LineWidth', 2.0); 
+hold on; 
+plot(a1(:,1), a1(:,2), 'LineWidth', 2.0);
+ylim([-0.1 0.2]); 
+legend('Online LS', 'Simulink LS')
+title('LS estimator of a_1')
+xlabel('t (s)')
 
 
 
@@ -251,3 +279,4 @@ xlabel('r');
 ylabel('\sigma^2'); 
 set(gca, 'yscale', 'log')
 grid on;
+
