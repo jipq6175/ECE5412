@@ -23,13 +23,14 @@ xlabel('a_1');
 ylabel('a_2');
 
 
-%% P38
+%% P38 rls
 a1 = -1.2;
 a2 = 0.7;
 y0 = 0.0;
 y1 = 0.0; 
-n = 1000; 
+n = 5000; 
 y = ar2simulate(y0, y1, a1, a2, n);
+estimate = rls(y, 2, 0.0001, 1, ones(2,1), 0.5*eye(2)); 
 
 figure(1)
 subplot(1,3,1)
@@ -38,85 +39,55 @@ xlim([0, n]);
 xlabel('k');
 ylabel('y_k')
 
-a1e = zeros(100,1);
-a2e = zeros(100,1);
-for i = 1:100
-y = ar2simulate(y0, y1, a1, a2, n);
-X = [y(2:n-1) y(1:n-2)]; 
-Y = y(3:n);
-estimate = inv(X' * X) * X' * Y;
-a1e(i) = -estimate(1);
-a2e(i) = -estimate(2);
-end
-
-display(mean(a1e));
-display(mean(a2e));
-
 subplot(1,3,2)
-hist(a1e);
-hold on
-line([a1 a1], [0 25], 'LineWidth', 3.0, 'Color', 'r')
-xlabel('a_1')
+plot(1:n+2, -estimate(:, 1))
+hold on;
+line([0 n+2], [a1 a1], 'Color', 'k', 'LineWidth', 2.0)
+plot(1:n+2, movmean(-estimate(:, 1), 1000), 'r-', 'LineWidth', 2.0)
+title('a_1')
+xlim([0, n]);
+ylim([a1-10 a1+10])
+xlabel('k');
+legend('a_1 RLS estimate', 'a_1=-1.2', '1000-step MVA')
 
 subplot(1,3,3)
-hist(a2e);
-hold on
-line([a2 a2], [0 25], 'LineWidth', 3.0, 'Color', 'r')
-xlabel('a_2')
+plot(1:n+2, -estimate(:, 2))
+hold on;
+line([0 n+2], [a2 a2], 'Color', 'k', 'LineWidth', 2.0)
+plot(1:n+2, movmean(-estimate(:, 2), 1000), 'r-', 'LineWidth', 2.0)
+title('a_2')
+xlim([0, n]);
+ylim([a2-10 a2+10])
+xlabel('k');
+legend('a_1 RLS estimate', 'a_2=0.7', '1000-step MVA')
 
-%% p38
-figure(1)
+%% p38 different initializations
+% vary r and c
 
-n = 1000; 
-subplot(4,2,[1 3])
-plot(ar2simulate(y0, 300, a1, a2, n));
-title(['y0 = 0, y1 = ' num2str(300)]);
-ylim([-10 10]);
-xlim([0 1000])
+estimate = rls(y, 2, 0.01, 1.0, [-100; 1], 0.0001*eye(2)); 
 
-subplot(4,2,[2 4])
-plot(ar2simulate(y0, 600, a1, a2, n));
-title(['y0 = 0, y1 = ' num2str(600)]);
-ylim([-10 10]);
-xlim([0 1000])
 
-subplot(4,2,[5 7])
-plot(ar2simulate(y0, 900, a1, a2, n));
-title(['y0 = 0, y1 = ' num2str(900)]);
-ylim([-10 10]);
-xlim([0 1000])
+subplot(1,2,1)
+hold on;
+line([0 n+2], [a1 a1], 'Color', 'k', 'LineWidth', 2.0)
+plot(1:n+2, movmean(-estimate(:, 1), 1000), 'r-', 'LineWidth', 2.0)
+title('a_1')
+xlim([0, n]);
+ylim([a1-3 a1+3])
+xlabel('k');
+legend('a_1=-1.2', '1000-step MVA')
 
-a1i = zeros(1000,1);
-a2i = zeros(1000,1);
-for y1 = 1:1000
-a1 = -1.2;
-a2 = 0.7;
-y0 = 0.0;
+subplot(1,2,2)
+hold on;
+line([0 n+2], [a2 a2], 'Color', 'k', 'LineWidth', 2.0)
+plot(1:n+2, movmean(-estimate(:, 2), 1000), 'r-', 'LineWidth', 2.0)
+title('a_2')
+xlim([0, n]);
+ylim([a2-3 a2+3])
+xlabel('k');
+legend('a_2=0.7', '1000-step MVA')
 
-a1e = zeros(100,1);
-a2e = zeros(100,1);
-for i = 1:100
-y = ar2simulate(y0, y1, a1, a2, n);
-X = [y(2:n-1) y(1:n-2)]; 
-Y = y(3:n);
-estimate = inv(X' * X) * X' * Y;
-a1e(i) = -estimate(1);
-a2e(i) = -estimate(2);
-end
 
-a1i(y1) = mean(a1e);
-a2i(y1) = mean(a2e);
-end
-
-subplot(4,2,6)
-plot(a1i, 'r.');
-xlabel('y_1')
-ylabel('a_1')
-
-subplot(4,2,8)
-plot(a2i, 'b.');
-xlabel('y_1')
-ylabel('a_2')
 
 
 %% p39

@@ -67,26 +67,39 @@ Choose $a_1 = -1.2$ and $a_2=0.7$ and the AR2 model is now
 \begin{equation}
 y_k = 1.2y_{k-1} - 0.7y_{k-2} + w_k
 \end{equation}
-with $y_0 = y_1 = 0$. We simulate 1000 observations of the system and compute the recursive least square (RLS) estimator for $a_1$ and $a_2$ using $Y = \Psi \theta + \epsilon$, where $Y = (y_3, y_4, \dots, y_{1002})'$, $\theta = (a_1, a_2)'$ and $\epsilon_i \sim N(0, I)$ iid. The trace is shown in the left plot of Fig. 2. The regression matrix $\Psi$ is the following
+with $y_0 = y_1 = 0$. We simulate 5000 observations of the system and compute the recursive least square (RLS) estimator for $\theta = (a_1, a_2)'$ using recursive least square (RLS). The RLS estimator at step $N+1$ is given by  
+\begin{equation}
+\theta_{N+1} = \theta_N + \frac{P_N\psi_{N+1}}{\rho/c + \psi_{N+1}'P_N\psi_{N+1}}(y_{N+1} - \psi_{N+1}'\theta_N)
+\end{equation}
 
 \begin{equation}
-\Psi = \begin{bmatrix}
-y_2 & y_1 \\
-y_3 & y_4 \\ 
-\vdots & \vdots\\
-y_{1001} & y_{1000}
-\end{bmatrix}
+P_{N+1} = \frac{1}{\rho}\left[P_N - \frac{P_N\psi_{N+1}\psi_{N+1}'P_N}{\rho/c + \psi_{N+1}'P_N\psi_{N+1}} \right]
 \end{equation}
-Then, $\hat{\theta} = (\hat{a_1}, \hat{a_2})' = (\Psi' \Psi)^{-1} \Psi' Y$. We run 100 times of this estimation process to get the statistics of the estimators. The histograms of $\hat{a_1}$ and $\hat{a_2}$ are shown in the middle and right plots of Fig. 2. Using 100 simulations, we obtain $E[\hat{a_1}] = -1.1965$ with std $0.0221$ and $E[\hat{a_2}] = 0.7001$ with std $0.0219$. 
+where $\psi_{N+1} = (y_N, y_{N-1})'$, $P_N \in \mathbb{R}^{2\times 2}, P_N >0$ and the forgetting parameter $\rho$. We initialize the estimator and matrix using $\theta_1 = (1, 1)'$ and $P_1 = I$. We choose $\rho = 10^{-4}$ and $c=1$ and keep them for this problem. 
+
+
+The simulated trace ($y_k$) is shown in the left plot of Fig. 2. The RLS estimator of $a_1$ and $a_2$ are shown in the middle and right panels respectively, where we show the trace(blue), true value(black) and 1000-step moving average(red). 
+
+
+To compare the RLS to the classical offline least square estimate, we do the estimation using 1000 observations for the estimator, $\hat{\theta} = (\hat{a_1}, \hat{a_2})' = (\Psi' \Psi)^{-1} \Psi' Y$. We run 100 times of this estimation process to get the statistics of the estimators. The histograms of $\hat{a_1}$ and $\hat{a_2}$ are shown in the middle and right plots of Fig. 3. Using 100 simulations, we obtain $E[\hat{a_1}] = -1.1965$ with std $0.0221$ and $E[\hat{a_2}] = 0.7001$ with std $0.0219$. 
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.5in]{p38rls.png}
+		\caption{Problem 38: Online RLS. (left) The trace of 5000 observations using $a_1 = -1.2$, $a_2=0.7$ with $y_0 = y_1 = 0$. (middle) The RLS trace of $\hat{a_1}$. (right) The RLS trace of $\hat{a_2}$.}
+	\end{center}
+\end{figure}
+
 
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=6.5in]{p38.png}
-		\caption{Problem 38: (left) The trace of one simulation of 1000 observations using $a_1 = -1.2$, $a_2=0.7$ with $y_0 = y_1 = 0$. (middle) The histogram of $\hat{a_1}$. (right) The histogram of $\hat{a_2}$ from 100 simulations. }
+		\caption{Problem 38: Offline Batch LS. (left) The trace of one simulation of 1000 observations using $a_1 = -1.2$, $a_2=0.7$ with $y_0 = y_1 = 0$. (middle) The histogram of $\hat{a_1}$. (right) The histogram of $\hat{a_2}$ from 100 simulations. }
 	\end{center}
 \end{figure}
 
-To explore the effect of starting states $y_0$ and $y_1$, we fix $y_0=0$ and vary $y_1$ from $1$ to $1000$ and repeat the aforementioned process to compute the RLS estimators. The traces of $y_1 = 300, 600, 900$ are shown in Fig. 3 and $\hat{a_1}$ and $\hat{a_2}$ traces are shown in the bottom right plot of Fig. 3. The AR2 system stabilizes within 100 observations. In general, the RLS estimation works well, resulting in precise estimators of $a_1$ and $a_2$. However, we observe (relatively) larger estimation errors for $y_1 < 100$. For larger input difference, it propagates longer into the system so we have a better estimation of the parameters whereas smaller input difference disappears fast and the system is dominated by Gaussian noises later on. 
+
+To explore the effect of initialization for RLS algorithm, 
 
 \begin{figure}
 	\begin{center}
