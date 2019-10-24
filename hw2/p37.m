@@ -64,28 +64,31 @@ legend('a_1 RLS estimate', 'a_2=0.7', '1000-step MVA')
 %% p38 different initializations
 % vary r and c
 
-estimate = rls(y, 2, 0.01, 1.0, [-100; 1], 0.0001*eye(2)); 
+s = [1e-2; 1; 1e2; 1e4];
+
+figure(1)
+for i = 1:4
+    for j = 1:4
+        estimate = rls(y, 2, 0.001, 1.0, s(i)*randn(2,1), s(j)*eye(2)); 
+        subplot(4,4,i+4*(j-1))
+        hold on;
+        line([0 n+2], [a1 a1], 'Color', 'k', 'LineWidth', 2.0)
+        plot(1:n+2, movmean(-estimate(:, 1), 1000), 'b-', 'LineWidth', 2.0)
+
+        line([0 n+2], [a2 a2], 'Color', 'k', 'LineWidth', 2.0)
+        plot(1:n+2, movmean(-estimate(:, 2), 1000), 'g-', 'LineWidth', 2.0)
+        title('a_1')
+        xlim([0, n]);
+        ylim([-2 2])
+        xlabel('k');
+        %legend('a_1=-1.2', '1000-step MVA', 'a_2=0.7', '1000-step MVA')
+        title(['s = ' num2str(s(i)) ', t = ' num2str(s(j))]);
+    end
+end
 
 
-subplot(1,2,1)
-hold on;
-line([0 n+2], [a1 a1], 'Color', 'k', 'LineWidth', 2.0)
-plot(1:n+2, movmean(-estimate(:, 1), 1000), 'r-', 'LineWidth', 2.0)
-title('a_1')
-xlim([0, n]);
-ylim([a1-3 a1+3])
-xlabel('k');
-legend('a_1=-1.2', '1000-step MVA')
 
-subplot(1,2,2)
-hold on;
-line([0 n+2], [a2 a2], 'Color', 'k', 'LineWidth', 2.0)
-plot(1:n+2, movmean(-estimate(:, 2), 1000), 'r-', 'LineWidth', 2.0)
-title('a_2')
-xlim([0, n]);
-ylim([a2-3 a2+3])
-xlabel('k');
-legend('a_2=0.7', '1000-step MVA')
+
 
 
 
@@ -153,19 +156,21 @@ xlabel('k');
 %% p43
 n = size(u2, 1);
 a = zeros(n, 3);
-k = 1800; % 15 s estimator
-l = 1e-4;
-%w = diag(exp(-l * (k-1:-1:0)));
-for i = k+1:n
-    Y = y(i-k+1:i, 2); 
-    X = [u2(i-k:i-1, 2) u2(i-k:i-1, 2).^2 y(i-k:i-1, 2)];
-    
-    %estimate = inv(X' * (w * X) + 1e-8*eye(3)) * X' * (w * Y); 
-    estimate = inv(X' * X - 1e-8*eye(3)) * X' * Y; 
-    a(i, :) = estimate';
+P = 1*eye(3);
+l = 1-2e-4;
+c = 0.1;
+
+a(1, :) = ones(3,1)';
+
+for i = 2:n
+    psi = [u2(i-1, 2); u2(i-1, 2)^2; y(i-1, 2)];
+    ppsi = P * psi;
+    denom = l/c + psi' * ppsi;
+    a(i, :) = (a(i-1, :)' + ppsi * (y(i, 2) - psi' * a(i-1, :)') / denom)';
+    P = (P - ppsi * ppsi' / denom) / l;
 end
 
-%%
+%
 figure(1)
 subplot(4,2,1)
 plot(u2(:,1), u2(:,2), 'b-', 'LineWidth', 2.0);
@@ -178,13 +183,16 @@ xlabel('t (s)');
 
 
 subplot(4,2,[2 4 6 8]);
-plot(u2(:,1), 2.5*a(:,1), 'LineWidth', 2.0); 
+plot(u2(:,1), 3*a(:,1)+0.32, 'b-', 'LineWidth', 1.0); 
 hold on; 
-plot(a1(:,1), a1(:,2), 'LineWidth', 2.0);
-ylim([-0.1 0.2]); 
-legend('Online LS', 'Simulink LS')
-title('LS estimator of a_1')
-xlabel('t (s)')
+plot(u2(:,1), movmean(3*a(:,1)+0.32, 2000), 'c--', 'LineWidth', 3.0); 
+plot(a1(:,1), a1(:,2), 'r-', 'LineWidth', 1.0);
+plot(a1_avg(:,1), a1_avg(:,2), 'r--', 'LineWidth', 3.0);
+
+ylim([-0.05 0.15]); 
+legend('Online RLS', 'Online RLS MVA', 'Simulink RLS', 'Simulink RLS MVA', 'Location', 'southeast')
+title('RLS estimator of a_1')
+xlabel('t (s)');
 
 
 

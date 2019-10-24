@@ -63,6 +63,7 @@ The possible values of $a_1$ and $a_2$ are shown in Fig. 1 as the colored areas,
 
 
 \section*{Problem 38}
+
 Choose $a_1 = -1.2$ and $a_2=0.7$ and the AR2 model is now
 \begin{equation}
 y_k = 1.2y_{k-1} - 0.7y_{k-2} + w_k
@@ -99,11 +100,11 @@ To compare the RLS to the classical offline least square estimate, we do the est
 \end{figure}
 
 
-To explore the effect of initialization for RLS algorithm, 
+To explore the effect of initialization for RLS algorithm, we use $\theta_0 = s(a_{1,0}, a_{2, 0})'$ and $P_0 = tI$ where $s, t$ are real numbers and $a_{1,0}$ and $a_{2,0}$ are random variable with standard normal distributions. We test the values of $s, t$ ranging from $10^{-2}$ to $10^4$. The 1000-step moving average for the RLS estimate of $a_1$ and $a_2$ are shown in blue and green in Fig. 4 where each panel represents different combinations of $s$ and $t$. We observe that the initialization does not play an important role here because after enough observations, the RLS estimator forgets about the past exponentially. 
 
 \begin{figure}
 	\begin{center}
-		\includegraphics[width=6.5in]{p38b.png}
+		\includegraphics[width=6.5in]{p38c.png}
 		\caption{Problem 38: The effect of initial states. }
 	\end{center}
 \end{figure}
@@ -153,7 +154,7 @@ The engine is modeled by a combination of non-linear input model and AR-1 respon
 \begin{equation}
 y_n = a_1u_{n-1} + a_2u_{n-1}^2 + a_3y_{n-1} + w_n
 \end{equation}
-Our goal is to use the vector $u$ and $y$ to construct a online least square estimation of the parameters $a_i$'s. In the MATLAB Simulink, the parameter estimations are updated each step; however, in our attempt to reproduce the MATLAB result, we extract the data from the Simulink model and do the online estimation ourselves. 
+Our goal is to use the vector $u$ and $y$ to construct a online least square estimation of the parameters $a_i$'s. In the MATLAB Simulink, the parameter estimations are updated each step; however, in our attempt to reproduce the MATLAB result, we extract the data from the Simulink model and do the RLS estimation ourselves. 
 
 \begin{figure}
 	\begin{center}
@@ -173,6 +174,9 @@ where we set $\epsilon = 10^{-4}$.
 The input pulse and output response are shown on the left plots of Fig. 5. The online LS estimations of $a_i$ from our simple estimation and from Simulink are shown on the right panel of Fig. 5. This engine system is designed to change inertia at $t=100$ s, which affects the $a_1$ value. In both our and Simulink estimations, the estimated values of $a_1$ change abruptly at $t=100$ s, which signals the change in the engine inertia. 
 
 The difference between our estimation and Simulink might be due to the followings, which can be improved for more precise estimation. First, we simply apply the past 15-second data to make online LS estimation. Using a forgetting parameter with longer data might improve the agreement. Second, we apply equal weights to the past data, which in real-life estimation can be improved by applying decaying weights to the past data. Finally, due to the equal weights, we are forced to apply $\epsilon^2 I$ to condition the $\Psi' \Psi$ matrix in case of close-to-singularity. However, if different weights are applied, $\Psi' \Psi$ will never be close to a singular matrix. Despite these simplifications in our online LS model estimation, we are still able to detect the change in $a_1$ at $t=100$ s. 
+
+
+
 
 \section*{Problem 46}
 The stochastic least square problem $Y = \Psi \theta + \epsilon$ where $\epsilon\sim N_N(0, \sigma^2I_N)$ has the estimator $\theta_*$: 
