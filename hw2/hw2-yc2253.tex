@@ -76,7 +76,7 @@ with $y_0 = y_1 = 0$. We simulate 5000 observations of the system and compute th
 \begin{equation}
 P_{N+1} = \frac{1}{\rho}\left[P_N - \frac{P_N\psi_{N+1}\psi_{N+1}'P_N}{\rho/c + \psi_{N+1}'P_N\psi_{N+1}} \right]
 \end{equation}
-where $\psi_{N+1} = (y_N, y_{N-1})'$, $P_N \in \mathbb{R}^{2\times 2}, P_N >0$ and the forgetting parameter $\rho$. We initialize the estimator and matrix using $\theta_1 = (1, 1)'$ and $P_1 = I$. We choose $\rho = 10^{-4}$ and $c=1$ and keep them for this problem. 
+where $\psi_{N+1} = (y_N, y_{N-1})'$, $P_N \in \mathbb{R}^{2\times 2}, P_N >0$ and the forgetting parameter $\rho$. We initialize the estimator and matrix using $\theta_1 = (1, 1)'$ and $P_1 = I$. We choose $\rho = 1-10^{-4}$ and $c=1$ and keep them for this problem. 
 
 
 The simulated trace ($y_k$) is shown in the left plot of Fig. 2. The RLS estimator of $a_1$ and $a_2$ are shown in the middle and right panels respectively, where we show the trace(blue), true value(black) and 1000-step moving average(red). 
@@ -100,7 +100,7 @@ To compare the RLS to the classical offline least square estimate, we do the est
 \end{figure}
 
 
-To explore the effect of initialization for RLS algorithm, we use $\theta_0 = s(a_{1,0}, a_{2, 0})'$ and $P_0 = tI$ where $s, t$ are real numbers and $a_{1,0}$ and $a_{2,0}$ are random variable with standard normal distributions. We test the values of $s, t$ ranging from $10^{-2}$ to $10^4$. The 1000-step moving average for the RLS estimate of $a_1$ and $a_2$ are shown in blue and green in Fig. 4 where each panel represents different combinations of $s$ and $t$. We observe that the initialization does not play an important role here because after enough observations, the RLS estimator forgets about the past exponentially. 
+To explore the effect of initialization for RLS algorithm, we use $\theta_0 = s(a_{1,0}, a_{2, 0})'$ and $P_0 = tI$ where $s, t$ are real numbers and $a_{1,0}$ and $a_{2,0}$ are random variable with standard normal distributions. We test the values of $s, t$ ranging from $10^{-2}$ to $10^4$. The 1000-step moving average for the RLS estimate of $a_1$ and $a_2$ are shown in blue and green in Fig. 4 where each panel represents different combinations of $s$ and $t$. We observe that the RLS converges fast under reasonable initialization conditions because after enough observations, the RLS estimator forgets about the past exponentially. Here $s$ can be thought of as how far the initial guess deviates from the real value and $t$ is the optimization step size. Therefore, for large $s$ (toward the right panels) and small $t$ (toward the top panels), the RLS estimators need more steps (observations) to converge to the real values. In one of our extreme testing case where $s=10000$ and $t = 0.01$ (top-right panel), the RLS estimators do not converge after 5000 observations. 
 
 \begin{figure}
 	\begin{center}
@@ -135,16 +135,16 @@ where $\hat{\sigma}^2(p,q)$ is the variance of the residuals of the fitted ARMA 
 \hat{\sigma}^2(p,q) = \text{var}(Y - \hat{Y}) = \text{var}\left\{ \left[ I_{p+q} - \Psi (\Psi ' \Psi)^{-1} \Psi ' \right]Y \right\}
 \end{equation}
 
-In our case of AR model, $q = 0$. We simulate $n = 1002$ from an AR2 model using $a_1 = -1.2$ and $a_2=0.7$ with $y_0 = y_1 = 0$. The simulated data is shown in the top left panel of Fig. 3. We apply the RLS estimation for AR-k model where $k \in \{1,2,\dots, 300 \}$ and compare the AIC and BIC for all the models. We show the traces of residuals of AR-2 (middle left) and AR-100 models (bottom left) in Fig. 3.  
+In our case of AR model, $q = 0$. We simulate $n = 1002$ from an AR2 model using $a_1 = -1.2$ and $a_2=0.7$ with $y_0 = y_1 = 0$. The simulated data is shown in the top left panel of Fig. 5. We apply the LS estimation for AR-k model where $k \in \{1,2,\dots, 300 \}$ and compare the AIC and BIC for all the models. We show the traces of residuals of AR-2 (middle left) and AR-100 models (bottom left) in Fig. 3.  
 
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=6.5in]{p39.png}
-		\caption{Problem 39: (top left) The simulated data from an AR-2 system using $a_1 = -1.2$ and $a_2=0.7$ with $y_0 = y_1 = 0$. The traces of the residuals (middle left) using the AR-2 model and (bottom left) AR-100 model for RLS estimation. The panels on the right show the $\hat{\sigma}^2$, AIC and BIC of the AR-k models with the lowest value indicated as "x" which is the AR-1 model. }
+		\caption{Problem 39: (top left) The simulated data from an AR-2 system using $a_1 = -1.2$ and $a_2=0.7$ with $y_0 = y_1 = 0$. The traces of the residuals (middle left) using the AR-2 model and (bottom left) AR-100 model for LS estimation. The panels on the right show the $\hat{\sigma}^2$, AIC and BIC of the AR-k models with the lowest value indicated as "x" which is the AR-1 model. }
 	\end{center}
 \end{figure}
 
-Using the same simulated data, we estimated the AR-k parameters using RLS method. The variance of the residuals, the AIC and BIC are plotted in the right column of Fig. 3. We label the lowest value with "x" which turns out to be from the AR-1 model. Therefore, by AIC and BIC, the order of AR model is 1. 
+Using the same simulated data, we estimated the AR-k parameters using LS method. The variance of the residuals, the AIC and BIC are plotted in the right column of Fig. 5. We label the lowest value with "x" which turns out to be from the AR-1 model. Therefore, by AIC and BIC, the order of AR model is 1. 
 
 
 
@@ -154,26 +154,20 @@ The engine is modeled by a combination of non-linear input model and AR-1 respon
 \begin{equation}
 y_n = a_1u_{n-1} + a_2u_{n-1}^2 + a_3y_{n-1} + w_n
 \end{equation}
-Our goal is to use the vector $u$ and $y$ to construct a online least square estimation of the parameters $a_i$'s. In the MATLAB Simulink, the parameter estimations are updated each step; however, in our attempt to reproduce the MATLAB result, we extract the data from the Simulink model and do the RLS estimation ourselves. 
+Our goal is to use the vector $u$ and $y$ to construct a online recursive least square estimation of the parameters $a_i$'s. In the MATLAB Simulink, the parameter estimations are updated each step along with the simulation on the fly; however, in our attempt to reproduce the result, we extract the data from the Simulink model and do the RLS estimation using Eq. (8) and (9). 
 
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=6.0in]{p43.png}
-		\caption{Problem 43: (left) . }
+		\caption{Problem 43: (left) The input $u$ of the engine and the responses $y$. (right) The RLS estimator for $a_1$ by implementing Eq. (8) and (9) with the 2000-step moving average (blue and cyan). The red trace is the result directly extracted from the Simulink model and the magenta trace is the moving average. }
 	\end{center}
 \end{figure}
 
-In the Simulink online LS estimation, there is a forgetting parameter, $\lambda=10^{-4}$, suggesting that the LS model only takes into account the latest historical data to make LS estimation. Since the input pulse has period of 10 seconds, we have to use past $t$ seconds responses where $t > 10$. In Simulink, $\lambda=10^{-4}$ corresponds to about $15$ seconds of past data and exponential weights are also applied. 
+In the Simulink online RLS estimation, the forgetting parameter is set to $\rho=1-10^{-4}$, corresponding to about $15$ seconds of past data. 
 
-On the other hand, in our attempt to make online LS estimation, we simply take past 15-second responses with equal weights to make estimation of $a_i$'s. Since the input pulse is a square wave, the regression matrix $\Psi$ might have linearly-dependent columns. The matrix $\Psi'\Psi$ might be close to singular matrix. We deal with such instability by using 
-\begin{equation}
-(\Psi'\Psi)^{-1} \approx (\Psi'\Psi + \epsilon^2 I)^{-1}
-\end{equation}
-where we set $\epsilon = 10^{-4}$. 
 
-The input pulse and output response are shown on the left plots of Fig. 5. The online LS estimations of $a_i$ from our simple estimation and from Simulink are shown on the right panel of Fig. 5. This engine system is designed to change inertia at $t=100$ s, which affects the $a_1$ value. In both our and Simulink estimations, the estimated values of $a_1$ change abruptly at $t=100$ s, which signals the change in the engine inertia. 
+The input pulse and output response are shown on the left plots of Fig. 6. The online RLS estimations of $a_1$ from our estimation and from Simulink are shown on the right panel of Fig. 6. This engine system is designed to change inertia at $t=100$ s, which affects the $a_1$ value. In both our and Simulink estimations, the estimated values of $a_1$ change abruptly at $t=100$ s, which signals the change in the engine inertia. 
 
-The difference between our estimation and Simulink might be due to the followings, which can be improved for more precise estimation. First, we simply apply the past 15-second data to make online LS estimation. Using a forgetting parameter with longer data might improve the agreement. Second, we apply equal weights to the past data, which in real-life estimation can be improved by applying decaying weights to the past data. Finally, due to the equal weights, we are forced to apply $\epsilon^2 I$ to condition the $\Psi' \Psi$ matrix in case of close-to-singularity. However, if different weights are applied, $\Psi' \Psi$ will never be close to a singular matrix. Despite these simplifications in our online LS model estimation, we are still able to detect the change in $a_1$ at $t=100$ s. 
 
 
 
@@ -279,12 +273,29 @@ We can set $C(0) = 1/(N-n)$ to make $\hat{\sigma}^2$ an unbiased estimator.
 
 
 
-\section*{Problem 47}
+\section*{Problem 48}
 
 
+Given a set of $n$ face images with dimension $m$ as the database matrix $A$, we can do the PCA of $A = UDV' = \sum_{i=1}^m \sigma_iu_iv_i'$ using rank $r\leq m$. The PCA approximation of the database is 
 
- 
+\begin{equation}
+Z = \sum_{i=1}^r \sigma_iu_iv_i' = U_rD_rV_r'
+\end{equation}
 
+Given the unknown face $a^{new}$, in order to determine which face is the most similar in the database, we compute the deviation $||a_i - a^{new}||$. The lowest deviation should be the most similar face and we can identify this unknown face. Using PCA, the deviation is
+
+\begin{equation}
+||a_i - a^{new}|| = ||U_rD_rV_r'e_i - a^{new}|| = ||D_rV_r'e_i - U_r'a^{new}||
+\end{equation}
+
+Therefore, instead of computing $||a_i - a^{new}||$ elementwise in the database, we can project $a^{new}$ to the principal axes and compare $r$ components with the feature vectors $D_rV_r'e_i$ in the database. 
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.0in]{p48a.png}
+		\caption{Problem 48: Snippet of the downloaded face data set. }
+	\end{center}
+\end{figure}
 
 
 

@@ -30,7 +30,7 @@ y0 = 0.0;
 y1 = 0.0; 
 n = 5000; 
 y = ar2simulate(y0, y1, a1, a2, n);
-estimate = rls(y, 2, 0.0001, 1, ones(2,1), 0.5*eye(2)); 
+estimate = rls(y, 2, 1-0.0001, 1, ones(2,1), 0.5*eye(2)); 
 
 figure(1)
 subplot(1,3,1)
@@ -46,7 +46,7 @@ line([0 n+2], [a1 a1], 'Color', 'k', 'LineWidth', 2.0)
 plot(1:n+2, movmean(-estimate(:, 1), 1000), 'r-', 'LineWidth', 2.0)
 title('a_1')
 xlim([0, n]);
-ylim([a1-10 a1+10])
+ylim([a1-0.1 a1+0.1])
 xlabel('k');
 legend('a_1 RLS estimate', 'a_1=-1.2', '1000-step MVA')
 
@@ -57,7 +57,7 @@ line([0 n+2], [a2 a2], 'Color', 'k', 'LineWidth', 2.0)
 plot(1:n+2, movmean(-estimate(:, 2), 1000), 'r-', 'LineWidth', 2.0)
 title('a_2')
 xlim([0, n]);
-ylim([a2-10 a2+10])
+ylim([a2-0.1 a2+0.1])
 xlabel('k');
 legend('a_1 RLS estimate', 'a_2=0.7', '1000-step MVA')
 
@@ -69,7 +69,7 @@ s = [1e-2; 1; 1e2; 1e4];
 figure(1)
 for i = 1:4
     for j = 1:4
-        estimate = rls(y, 2, 0.001, 1.0, s(i)*randn(2,1), s(j)*eye(2)); 
+        estimate = rls(y, 2, 1-0.001, 1.0, s(i)*randn(2,1), s(j)*eye(2)); 
         subplot(4,4,i+4*(j-1))
         hold on;
         line([0 n+2], [a1 a1], 'Color', 'k', 'LineWidth', 2.0)
@@ -258,4 +258,54 @@ xlabel('r');
 ylabel('\sigma^2'); 
 set(gca, 'yscale', 'log')
 grid on;
+
+
+
+
+%% p48
+
+load ev.mat
+load faceR
+load faceS
+
+
+v = faceR(5, 2:100)';
+i = eigenfaces'*v + mean_face';
+imagesc(reshape(i, 128, 128)'); colormap(gray(256));
+
+
+fid=fopen('C:\Users\yc225\Desktop\Courses\07 Fall 2019\ECE 5412 Bayesian Inference and Stochastic Optimization\rawdata\1223'); 
+I = fread(fid);
+imagesc(reshape(I, 128, 128)'); colormap(gray(256));
+
+
+%% plot some of the faces
+figure(1)
+ids = dir('C:\Users\yc225\Desktop\Courses\07 Fall 2019\ECE 5412 Bayesian Inference and Stochastic Optimization\rawdata');
+for j = 1:30
+    subplot(3,10,j);
+    dev = datasample(ids(3:end), 1);
+    fid=fopen(['C:\Users\yc225\Desktop\Courses\07 Fall 2019\ECE 5412 Bayesian Inference and Stochastic Optimization\rawdata\' dev.name]); 
+    I = fread(fid);
+    imagesc(reshape(I, 128, 128)'); colormap(gray(256));
+    set(gca,'xtick',[])
+    set(gca,'xticklabel',[])
+    set(gca,'ytick',[])
+    set(gca,'yticklabel',[])
+end
+
+
+
+
+%% make some of the predictions in the testing data
+dev = [];
+for j = 1:2000
+    v = faceS(j, 2:100)';
+    t = faceR(:, 2:100)' - repmat(v, [1, 2000]);
+    l = sqrt(sum(t.^2, 1));
+    k = find(l == min(l));
+    dev = [dev min(l)];
+end
+
+%%
 
