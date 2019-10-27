@@ -264,48 +264,67 @@ grid on;
 
 %% p48
 
-load ev.mat
-load faceR
-load faceS
-
-
-v = faceR(5, 2:100)';
-i = eigenfaces'*v + mean_face';
-imagesc(reshape(i, 128, 128)'); colormap(gray(256));
-
-
-fid=fopen('C:\Users\yc225\Desktop\Courses\07 Fall 2019\ECE 5412 Bayesian Inference and Stochastic Optimization\rawdata\1223'); 
-I = fread(fid);
-imagesc(reshape(I, 128, 128)'); colormap(gray(256));
-
-
-%% plot some of the faces
-figure(1)
-ids = dir('C:\Users\yc225\Desktop\Courses\07 Fall 2019\ECE 5412 Bayesian Inference and Stochastic Optimization\rawdata');
-for j = 1:30
-    subplot(3,10,j);
-    dev = datasample(ids(3:end), 1);
-    fid=fopen(['C:\Users\yc225\Desktop\Courses\07 Fall 2019\ECE 5412 Bayesian Inference and Stochastic Optimization\rawdata\' dev.name]); 
-    I = fread(fid);
-    imagesc(reshape(I, 128, 128)'); colormap(gray(256));
-    set(gca,'xtick',[])
-    set(gca,'xticklabel',[])
-    set(gca,'ytick',[])
-    set(gca,'yticklabel',[])
+% store the images
+path = 'C:\Users\yc225\Desktop\Courses\07 Fall 2019\ECE 5412 Bayesian Inference and Stochastic Optimization\rawdata';
+cd(path);
+people = dir();
+x = {};
+A = zeros(250*250, 150);
+for i = 1:15
+    x = [x; people(i+2).name];
+    imgs = dir(x{end});
+    for j = 1:10
+        img = imread(fullfile(x{end}, imgs(j+2).name));
+        A(:, 10*(i-1)+j) = reshape(double(rgb2gray(img)), [250*250, 1]);
+    end
 end
 
+eigenmean = mean(mean(A));
+A = A - eigenmean;
 
+%% plot sample faces
 
-
-%% make some of the predictions in the testing data
-dev = [];
-for j = 1:2000
-    v = faceS(j, 2:100)';
-    t = faceR(:, 2:100)' - repmat(v, [1, 2000]);
-    l = sqrt(sum(t.^2, 1));
-    k = find(l == min(l));
-    dev = [dev min(l)];
+id = datasample(1:150, 40);
+figure(1);
+for i = 1:40
+    subplot(4, 10, i);
+    imagesc(reshape(A(:, id(i)), [250, 250])); 
+    colormap(gray);
+    set(gca,'xtick',[]);
+    set(gca,'xticklabel',[]);
+    set(gca,'ytick',[]);
+    set(gca,'yticklabel',[]);
+    axis square
 end
 
-%%
+%% pca
+[paxis, D, V] = svd(A, 'econ');
+fvector = D * V';
+
+%% Do a leave-one-out cross validation
+B = A; 
+recograte = []; 
+
+for i = 1:15
+    cv = zeros(10,1);
+    for j = 1:10
+        B = A; 
+        anew = B(:,10*(i-1)+j);
+        B(:,10*(i-1)+j) = []; % remove one image
+        [paxis, D, V] = svd(B, 'econ');
+        fvector = D * V';
+        t = fvector - repmat(paxis' * anew, [1, 149]);
+        l = sqrt(sum(t.^2, 1));
+        id = find(l == min(l));
+        if (id > 10*(i-1)) && (id < 10*i)
+            cv(j) = 1.0;
+        else 
+            cv(j) = 0.0; 
+        end
+    end
+    display(['-- Cross Validating on ' x{i}]);
+    recograte = [recograte mean(cv)]; 
+end
+        
+
 
