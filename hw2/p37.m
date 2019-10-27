@@ -303,28 +303,50 @@ fvector = D * V';
 
 %% Do a leave-one-out cross validation
 B = A; 
-recograte = []; 
-
-for i = 1:15
-    cv = zeros(10,1);
-    for j = 1:10
-        B = A; 
-        anew = B(:,10*(i-1)+j);
-        B(:,10*(i-1)+j) = []; % remove one image
-        [paxis, D, V] = svd(B, 'econ');
-        fvector = D * V';
-        t = fvector - repmat(paxis' * anew, [1, 149]);
-        l = sqrt(sum(t.^2, 1));
-        id = find(l == min(l));
-        if (id > 10*(i-1)) && (id < 10*i)
-            cv(j) = 1.0;
-        else 
-            cv(j) = 0.0; 
+recograte = zeros(15, 5); 
+testrank = [10; 30; 50; 100; 125]; 
+for k = 1:5
+    r = testrank(k);
+    display(['======    Rank = ' num2str(r)]);
+    for i = 1:15
+        cv = zeros(10,1);
+        for j = 1:10
+            B = A; 
+            anew = B(:,10*(i-1)+j);
+            B(:,10*(i-1)+j) = []; % remove one image
+            [paxis, D, V] = svd(B, 'econ');
+            fvector = D(1:r, 1:r) * V(:, 1:r)';
+            t = fvector - repmat(paxis(:, 1:r)' * anew, [1, 149]);
+            l = sqrt(sum(t.^2, 1));
+            id = find(l == min(l));
+            if (id >= 10*(i-1)) && (id <= 10*i)
+                cv(j) = 1.0;
+            else 
+                cv(j) = 0.0; 
+            end
         end
+        display(['-- Cross Validating on ' x{i}]);
+        recograte(i, k) = mean(cv); 
     end
-    display(['-- Cross Validating on ' x{i}]);
-    recograte = [recograte mean(cv)]; 
 end
         
+%%
+[paxis, D, V] = svd(A, 'econ');
+fvector = D * V';
 
+figure(1);
+subplot(1,2,1)
+plot(diag(D), 'LineWidth', 2.0);
+xlabel('rank');
+ylabel('Error'); 
+title('PCA Approx Error');
+
+subplot(1,2,2)
+bar(categorical(x), recograte); 
+legend('10', '30', '50', '100', '125');
+set(gca,'xticklabel',strrep(x,'_',' ')); 
+ax = gca;
+ax.XTickLabelRotation = 45;
+title('Recognization Rate'); 
+ylim([0 1.0])
 

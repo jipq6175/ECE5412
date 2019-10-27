@@ -260,7 +260,7 @@ r'r & = Y'\left[I - 2\Psi M\Psi' + \Psi M\Psi' \Psi M\Psi' + \Psi MA'A M\Psi' \r
 \end{split}
 \end{equation}
 
-Notice that $I - \Psi\left(\Psi'\Psi + A'A \right)^{-1}\Psi'$ is not an idenpotent matrix and might have large singular values, $\sigma_i$, depending on matrix $A$. This is the effect we observe in Fig. 6 where the estimator $\hat{\sigma_c}^2$ can be roughly written as
+Notice that $I - \Psi\left(\Psi'\Psi + A'A \right)^{-1}\Psi'$ is not an idenpotent matrix and might have large singular values, $\sigma_i$, depending on matrix $A$. This is the effect we observe in Fig. 7 where the estimator $\hat{\sigma_c}^2$ can be roughly written as
 \begin{equation}
 \hat{\sigma_c}^2 \approx \sigma^2 C(r)\sum_{i=1}^n \sigma_i^2
 \end{equation}
@@ -273,7 +273,7 @@ We can set $C(0) = 1/(N-n)$ to make $\hat{\sigma}^2$ an unbiased estimator.
 
 
 
-\section*{Problem 48}
+\section*{Problem 47}
 
 
 Given a set of $n$ face images with dimension $m$ as the database matrix $A$, we can do the PCA of $A = UDV' = \sum_{i=1}^m \sigma_iu_iv_i'$ using rank $r\leq m$. The PCA approximation of the database is 
@@ -292,18 +292,32 @@ Therefore, instead of computing $||a_i - a^{new}||$ elementwise in the database,
 
 \begin{figure}
 	\begin{center}
-		\includegraphics[width=6.0in]{p48a.png}
+		\includegraphics[width=6.5in]{p48a.png}
 		\caption{Problem 48: Snippet of the downloaded face data set. }
+	\end{center}
+\end{figure}
+
+We download the face data of the celebrities from UMass Amherst (http://vis-www.cs.umass.edu/lfw/). We select the people with 10 images for this problem. We show 40 of the faces in Fig. 8. All the image data is flattened and stored in a $m\times n$ matrix, $A$. In this small demonstration, $m=250^2$ and $n=150$. The PCA is computed and the PCA approximation error is plotted against the rank in the left panel of Fig. 9.
+
+We test the face recognition using PCA algorithm via leave-one-out cross validation. We remove one image $a^{new}$ from the data base $A$ and finding the following
+
+\begin{equation}
+\hat{i} = \text{argmin}_i ||D_rV_r'e_i - U_r'a^{new}||
+\end{equation}
+If $\hat{i}$ is the index of the correct person, the image $a^{new}$ is recognized. We run this procedure and show the recognition rates of all the people we include. Different PCA ranks: 10, 30, 50, 100, 125, are also tested. The recognition rates for all the people are shown in the right panel of Fig. 9. The recognition rates are not optimal because of the lack of pre-processing of the background and the small size of the data set. 
+
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.0in]{p48.png}
+		\caption{Problem 48: (left) The PCA approximation error v.s. rank. (right) The recognition rates of all the people using different ranks as in the legend.  }
 	\end{center}
 \end{figure}
 
 
 
-
-
-
 \section*{Attachments}
-	
+\textit{p37.m, ar2simulate.m, arestimate.m, rls.m}
 
 
 
