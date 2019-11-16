@@ -14,8 +14,99 @@
 \normalsize ECE 5412 \hfill yc2253@cornell.edu \\
 Fall 2019 \hfill Due: 11/30/19\\
 
+\section*{Problem 49}
+
+Let $f = \mathbf{E}[(X-g(Y))'R(X-g(Y))]$ and we would like to find $g(Y)$ that minimizes $f$. 
+
+\begin{equation}
+\begin{split}
+f = & \mathbf{E}[X'RX - g(Y)'RX - X'Rg(Y) + g(Y)'Rg(Y)]\\
+\frac{\partial f}{\partial g(Y)} & = 0 = \mathbf{E}[-2RX + 2Rg(Y)]\\
+\Longrightarrow & \mathbf{E}[RX] = \mathbf{E}[Rg(Y)]
+\end{split}
+\end{equation}
+
+Using the iterated expectations: $\mathbf{E}[g(X,Y)] = \mathbf{E}_Y\{\mathbf{E}_X[g(X,Y)|Y]\}$
+
+\begin{equation}
+\mathbf{E}_Y\left\{ \mathbf{E}_X [RX | Y] \right\} = \mathbf{E}_Y\left\{ \mathbf{E}_X [Rg(Y) | Y] \right\} = \mathbf{E}_Y[Rg(Y)]
+\end{equation}
+
+\begin{equation}
+R\mathbf{E}_Y\{\mathbf{E}_X[X|Y] \} = R\mathbf{E}_Y[g(Y)]
+\end{equation}
 
 
+Since $R$ is positive definite, $R^{-1}$ exists. Therefore, $\mathbf{E}_X[X|Y] = g(Y)$
+
+
+\section*{Problem 51}
+
+Suppose $\pi_1 = P'\pi_0 = (p_1, p_2)'$. Since $y_1 = x_1 + v_1$ where $v_1 \sim N(0,1 )$, we have $y_1|x_1 \sim N(y_1-x_1, 1)$. 
+\begin{equation}
+p(y_1|x_1) = \frac{1}{\sqrt{2\pi}}\exp\left[{-\frac{1}{2}(y_1-x_1)^2}\right]
+\end{equation}
+
+From the Bayes rule, 
+
+\begin{equation}
+p(x_1|y_1) = \frac{p(y_1|x_1)p(x_1)}{\sum_{x_1}p(y_1|x_1)p(x_1)}
+\end{equation}
+where $p(x_1=1) = p_1$ and $p(x_2=2) = p_2$.
+
+\begin{equation}
+\begin{split}
+p(x_1 = 1|y_1) & = \frac{p_1\exp\left[{-\frac{1}{2}(y_1-1)^2}\right]}{p_1\exp\left[{-\frac{1}{2}(y_1-1)^2}\right] + p_2\exp\left[{-\frac{1}{2}(y_1-2)^2}\right]} \\
+p(x_1 = 2|y_1) & = \frac{p_2\exp\left[{-\frac{1}{2}(y_1-2)^2}\right]}{p_1\exp\left[{-\frac{1}{2}(y_1-1)^2}\right] + p_2\exp\left[{-\frac{1}{2}(y_1-2)^2}\right]}
+\end{split}
+\end{equation}
+
+We can simplify Eq. (6) further as the following
+
+\begin{equation}
+\begin{split}
+p(x_1 = 1|y_1) & = \frac{p_1\exp\left[{-\frac{1}{2}(2y-3)}\right]}{p_1\exp\left[{-\frac{1}{2}(2y-3)}\right] + p_2} \\
+p(x_1 = 2|y_1) & = \frac{p_2}{p_1\exp\left[{-\frac{1}{2}(2y-3)}\right] + p_2}
+\end{split}
+\end{equation}
+
+
+\section*{Problem 54}
+
+
+
+
+
+
+\section*{Problem 55}
+
+
+
+
+\section*{Problem 57}
+
+
+
+
+
+\section*{Problem 58}
+
+
+
+
+
+\section*{Problem 59}
+
+
+
+
+
+\section*{Problem 61}
+
+
+
+
+\section*{Problem 62}
 
 
 
