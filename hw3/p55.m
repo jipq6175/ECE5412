@@ -57,7 +57,7 @@ for i = 1:4
         subplot(2,3,k);
         hold all; 
         scatter(X(1:50, 1), X(1:50, 2), 'b.');
-        scatter(X(51:100, 1), X(51:100, 2), 'gx');
+        scatter(X(51:100, 1), X(51:100, 2), 'g.');
         h = ezplot(f);
         h.LineWidth = 2.0;
         h.Color='r';
