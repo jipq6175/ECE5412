@@ -109,14 +109,37 @@ The LDA hyper-plane is $P(Y=0|X) = P(Y=1|X) = \frac{1}{2}$ and substituting $\mu
 \log\hat{\pi}(Y=0) + \frac{1}{2}(2\hat{\mu_0}'\hat{\Sigma}^{-1}X - \hat{\mu_0}'\hat{\Sigma}^{-1}\hat{\mu_0}) = \log\hat{\pi}(Y=1) + \frac{1}{2}(2\hat{\mu_1}'\hat{\Sigma}^{-1}X - \hat{\mu_1}'\hat{\Sigma}^{-1}\hat{\mu_1})
 \end{equation}
 
-We use the \textit{fisheriris.mat} data set to illustrate the performance of parametric LDA. The data set contains three classes: \textit{setosa}, \textit{versicolor} and \textit{virginica} with $n = 4$ and $50$ observation for each class. We remove the \textit{virginica} data to make it a binary classification problem with $Y = 0$ for \textit{setosa} and $Y=1$ for \textit{versicolor}. Therefore, $\hat{\pi}(Y=0) = \hat{\pi}(Y=1) = \frac{1}{2}$. 
+We use the \textit{fisheriris.mat} data set to illustrate the performance of parametric LDA. The data set contains three classes: \textit{setosa}, \textit{versicolor} and \textit{virginica} with $n = 4$ and $50$ observation for each class. We remove the \textit{virginica} data to make it a binary classification problem with $Y = 0$ for \textit{setosa} and $Y=1$ for \textit{versicolor}. Therefore, $\hat{\pi}(Y=0) = \hat{\pi}(Y=1) = \frac{1}{2}$. Eq. (13) is simplified as follows
+\begin{equation}
+\begin{split}
+2\hat{\mu_0}'\hat{\Sigma}^{-1}X - \hat{\mu_0}'\hat{\Sigma}^{-1}\hat{\mu_0} & = 2\hat{\mu_1}'\hat{\Sigma}^{-1}X - \hat{\mu_1}'\hat{\Sigma}^{-1}\hat{\mu_1}\\
+\iff 2(\hat{\mu_0} - \hat{\mu_1})'\hat{\Sigma}^{-1}X & = \hat{\mu_0}'\hat{\Sigma}^{-1}\hat{\mu_0} - \hat{\mu_1}'\hat{\Sigma}^{-1}\hat{\mu_1}
+\end{split}
+\end{equation}
 
+Secondly, we can use a semi-parametric model: 
+\begin{equation}
+P(Y=1|X=x) = \frac{e^{\alpha+\beta'x}}{e^{\alpha+\beta'x}+1} = \frac{1}{1+e^{-(\alpha+\beta'x)}}
+\end{equation}
+We can use the maximum likelihood to estimate $\alpha$ and $\beta$ using the data. The likelihood function is
+\begin{equation}
+L = \prod_{i=1}^nP(x_i)^{y_i}(1-P(x_i))^{(1-y_i)}
+\end{equation}
+\begin{equation}
+l = \log L = \sum_{i=1}^n\log{(1-P(x_i))} + \sum_{i=1}^n y_i\log{\left(\frac{P(x_i)}{1-P(x_i)} \right)}
+\end{equation}
+where $P(x_i) = P(Y=1|X=x_i)$. Eq. (17) does not have a close form expression so we have to use numerical optimization to estimate $\alpha$ and $\beta$. Fortunately, we have the gradient of the target function $l$:
+\begin{equation}
+\begin{split}
+\frac{\partial l}{\partial \alpha} & = \sum_{i=1}^n (y_i - P(x_i))\\
+\frac{\partial l}{\partial \beta_j} & = \sum_{i=1}^n (y_i - P(x_i))x_{ij}\\
+\end{split}
+\end{equation}
 
 
 \section*{Problem 57}
 
-
-
+Please see the final section for the short report. 
 
 
 \section*{Problem 58}

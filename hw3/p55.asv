@@ -50,9 +50,11 @@ for i = 1:4
         %display(c);
         f = @(x1, x2) -c + p(1)*x1 + p(2)*x2;
         
-        q = fitclinear(X,Y, 'Learner', 'logistic');
+        regfun = @(x) sum(log(1-(1 / (1 + exp(-x(1)-X * x(2:end)))))) + sum(Y' * log((1 / (1 + exp(-x(1)-X * x(2:end))))/(1-(1 / (1 + exp(-x(1)-X * x(2:end)))))));
+        [est, fval] = fminunc(regfun, randn([3, 1]), optimoptions('fminunc','MaxFunctionEvaluations', 3000));
+        display(est);
         
-        f2 = @(x1, x2) q.Bias + q.Beta(1)*x1 + q.Beta(2)*x2;
+        f2 = @(x1, x2) est(0) + est(1)*x1 + est(2)*x2;
         
         subplot(2,3,k);
         hold all; 
@@ -62,12 +64,10 @@ for i = 1:4
         h.LineWidth = 2.0;
         h.Color='r';
         g = ezplot(f2);
-        g.LineWidth = 2.0;
-        g.Color='m';
+        
         xlim([min(X(:, 1)), max(X(:, 1))]);
         ylim([min(X(:, 2)), max(X(:, 2))]);
         title(['X' num2str(i) '; X' num2str(j)]);
-        %legend('', '', 'Parametric', 'Logistic')
         hold off;
         xlabel(['X' num2str(i)]);
         ylabel(['X' num2str(j)]);
