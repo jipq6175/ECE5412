@@ -85,7 +85,7 @@ Suppose $Q_{ij}=Q_{ji}\neq 0$, we have
 \begin{equation}
 \frac{\pi_\infty(i)}{b_i} = \frac{\pi_\infty(j)}{b_j}
 \end{equation}
-Therefore, with stationary distribution $\pi_infty(i) \propto b_i$, this Markov Chain satisfies the balanced equation and is reversible. 
+Therefore, with stationary distribution $\pi_\infty(i) \propto b_i$, this Markov Chain satisfies the balanced equation and is reversible. 
 
 
 \section*{Problem 55}
@@ -122,7 +122,7 @@ Secondly, we can use a semi-parametric model:
 \begin{equation}
 P(Y=1|X=x) = \frac{e^{\alpha+\beta'x}}{e^{\alpha+\beta'x}+1} = \frac{1}{1+e^{-(\alpha+\beta'x)}}
 \end{equation}
-We can use the maximum likelihood to estimate $\alpha$ and $\beta$ using the data. The likelihood function is
+We apply the maximum likelihood to estimate $\alpha$ and $\beta$ using the data. The likelihood function is
 \begin{equation}
 L = \prod_{i=1}^nP(x_i)^{y_i}(1-P(x_i))^{(1-y_i)}
 \end{equation}
@@ -154,9 +154,46 @@ The binary classification results are shown in Fig. 1 with the naive Bayes and l
 
 Please see the final section for the short report. 
 
-
 \section*{Problem 58}
 
+In this problem we explore the effects of gender and smoking on the  re-admission times of patients with cardiac arrhythmia. The data set \textit{arrhythmia.mat} has 100 observations and contains the time between the first and second admission to the hospital due to cardiac arrhythmia. Some of the data is right-censored with different censoring cutoff because contact to the patient might be lost at different time. The data is further labeled with the gender and smoker. A snippet of the data is shown in Table 1. 
+
+\begin{table}[]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+patient \# & Re-admission Time ($t_i$) & Censored & Gender & Smoker \\ \hline
+1          & 5                 & 0        & 0      & 1      \\ \hline
+2          & 3                 & 0        & 1      & 1      \\ \hline
+3          & 19                & 1        & 1      & 0      \\ \hline
+4          & 17                & 1        & 1      & 0      \\ \hline
+\end{tabular}
+\caption{\label{tab:tab1} A snippet of the \textit{arrhythmia.mat} data set.}
+\end{table}
+
+Let $t_i$ be the re-admission time observation of the $i$\textsuperscript{th} patient and $y_i$ be the real readmission time. For uncensored data, $t_i = y_i$ $\forall i = 1,2,\dots, n_{uc}$ while for censored data with cutoff $c_j$, $t_j = c_j$ $\forall j = 1,2,\dots, n_c$. We formulate the Poisson model with parameter $x$ to be estimated as the following. 
+\begin{equation}
+P(t_i = y_i|x) = \frac{e^{-x}x^{t_i}}{t_i!} \quad \forall i = 1,2,\dots, n_{uc}
+\end{equation}
+\begin{equation}
+P(t_j = c_j|x) = \left(1 - \sum_{k=0}^{t_j}\frac{e^{-x}x^k}{k!} \right) \quad \forall j = 1,2,\dots, n_{c}
+\end{equation}
+The likelihood for the observed uncensored data $\{t_i\}_{i=1}^{n_{uc}}$ and censored data $\{t_j\}_{j=1}^{n_{c}}$ is 
+\begin{equation}
+P(\{t_i\}_{i=1}^{n_{uc}}; \{t_j\}_{j=1}^{n_{c}}|x) = \left(\prod_{i=1}^{n_{uc}}\frac{e^{-x}x^{t_i}}{t_i!} \right)\prod_{j=1}^{n_c}\left( 1 - \sum_{k=0}^{t_j}\frac{e^{-x}x^k}{k!} \right)
+\end{equation}
+We further assume the improper prior for the parameter $x$: $P(x) \sim \frac{1}{x}$ to evaluate the posterior distribution $P(x|\{t_i\}_{i=1}^{n_{uc}}; \{t_j\}_{j=1}^{n_{c}})$. We use Gibbs sampling to simulate a \textit{cloud} of the $x$ estimates and access the mean and variance of the estimate. For Gibbs sampling, we need to augment $\{y_j \}_{j=1}^{n_c}$ to the censored data and marginalize on $\{y_j \}_{j=1}^{n_c}$. We simulate the augmented data $\{y_j \}_{j=1}^{n_c}$ using the following probability distribution. 
+\begin{equation}
+P\left(y_j | \{t_i\}_{i=1}^{n_{uc}}, \{t_j\}_{j=1}^{n_{c}}, x \right) = \left(\frac{e^{-x}x^{y_j}}{y_j!} \right) I(y_j\geq t_j)
+\end{equation}
+With all the augmented $\{y_j \}_{j=1}^{n_c}$, the posterior of $x$ is then
+\begin{equation}
+\begin{split}
+P\left(x| \{t_i\}_{i=1}^{n_{uc}}, \{t_j\}_{j=1}^{n_{c}} \right) & = P\left( x| \{t_i\}_{i=1}^{n_{uc}}, \{y_j\}_{j=1}^{n_{c}} \right) \\
+ & \propto \left(\prod_{i=1}^{n_{uc}}\frac{e^{-x}x^{t_i}}{t_i!} \right)\left(\prod_{j=1}^{n_{c}}\frac{e^{-x}x^{y_i}}{y_i!}  \right)\left( \frac{1}{x}\right)
+\end{split}
+\end{equation}
+We simulate $\{y_j^{(k)} \}_{j=1}^{n_c}$ using Eq. (22) and $x^{(k)}$ using Eq. (23). The sequence $x^{(1)}, x^{(2)}, \dots, x^{(k)}$ converges to the posterior distribution $P(x|\{t_i\}_{i=1}^{n_{uc}}, \{t_j\}_{j=1}^{n_{c}})$.
 
 
 
