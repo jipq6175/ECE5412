@@ -184,17 +184,38 @@ P(\{t_i\}_{i=1}^{n_{uc}}; \{t_j\}_{j=1}^{n_{c}}|x) = \left(\prod_{i=1}^{n_{uc}}\
 \end{equation}
 We further assume the improper prior for the parameter $x$: $P(x) \sim \frac{1}{x}$ to evaluate the posterior distribution $P(x|\{t_i\}_{i=1}^{n_{uc}}; \{t_j\}_{j=1}^{n_{c}})$. We use Gibbs sampling to simulate a \textit{cloud} of the $x$ estimates and access the mean and variance of the estimate. For Gibbs sampling, we need to augment $\{y_j \}_{j=1}^{n_c}$ to the censored data and marginalize on $\{y_j \}_{j=1}^{n_c}$. We simulate the augmented data $\{y_j \}_{j=1}^{n_c}$ using the following probability distribution. 
 \begin{equation}
-P\left(y_j | \{t_i\}_{i=1}^{n_{uc}}, \{t_j\}_{j=1}^{n_{c}}, x \right) = \left(\frac{e^{-x}x^{y_j}}{y_j!} \right) I(y_j\geq t_j)
+P\left(y_j | \{t_i\}_{i=1}^{n_{uc}}, \{t_j\}_{j=1}^{n_{c}}, x \right) \propto \left(\frac{e^{-x}x^{y_j}}{y_j!} \right) I(y_j\geq t_j)
 \end{equation}
-With all the augmented $\{y_j \}_{j=1}^{n_c}$, the posterior of $x$ is then
+Note that sampling from Eq. (22) is equivalent to sampling from a Poisson with mean $x$ and than adding a constant $t_j$. With all the augmented $\{y_j \}_{j=1}^{n_c}$, the posterior of $x$ is then
 \begin{equation}
 \begin{split}
 P\left(x| \{t_i\}_{i=1}^{n_{uc}}, \{t_j\}_{j=1}^{n_{c}} \right) & = P\left( x| \{t_i\}_{i=1}^{n_{uc}}, \{y_j\}_{j=1}^{n_{c}} \right) \\
  & \propto \left(\prod_{i=1}^{n_{uc}}\frac{e^{-x}x^{t_i}}{t_i!} \right)\left(\prod_{j=1}^{n_{c}}\frac{e^{-x}x^{y_i}}{y_i!}  \right)\left( \frac{1}{x}\right)
 \end{split}
 \end{equation}
-We simulate $\{y_j^{(k)} \}_{j=1}^{n_c}$ using Eq. (22) and $x^{(k)}$ using Eq. (23). The sequence $x^{(1)}, x^{(2)}, \dots, x^{(k)}$ converges to the posterior distribution $P(x|\{t_i\}_{i=1}^{n_{uc}}, \{t_j\}_{j=1}^{n_{c}})$.
+One way is to we simulate $\{y_j^{(k)} \}_{j=1}^{n_c}$ using Eq. (22) and $x^{(k)}$ using Eq. (23). The sequence $x^{(1)}, x^{(2)}, \dots, x^{(k)}$ converges to the posterior distribution $P(x|\{t_i\}_{i=1}^{n_{uc}}, \{t_j\}_{j=1}^{n_{c}})$. The other way (given the form of the posterior) is to use the MAP estimator derived as the following. 
+\begin{equation}
+L = \log \left[P\left( x| \{t_i\}_{i=1}^{n_{uc}}, \{y_j\}_{j=1}^{n_{c}} \right)\right]
+\end{equation}
+\begin{equation}
+\frac{dL}{dx} = -(n_{uc}+n_c) + \frac{1}{x}\left(\sum_{i=1}^{n_{uc}}t_i + \sum_{j=1}^{n_c}y_j - 1 \right) = 0
+\end{equation}
+\begin{equation}
+\hat{x}_{MAP} = \frac{\sum_{i=1}^{n_{uc}}t_i + \sum_{j=1}^{n_c}y_j - 1}{n_{uc}+n_c}
+\end{equation}
+As one side note, the prior $P(x) \propto \frac{1}{x}$ comes in as the $-1$ term. Given large number of observations, $n$, the effect of the prior dies with $\mathcal{O}(1/n)$.
 
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.5in]{p58.png}
+		\caption{Problem 58: The histograms of $x$ estimate using Gibbs sampling to investigate the (left) gender effect (middle) smoking effect and (right) combined effect of the re-admission time for 100 patients with cardiac arrhythmia. The mean and standard deviation of $x$ estimate is reported in the legend where $n$ is the number of observations in the data set. } 
+	\end{center}
+\end{figure}
+
+The distributions of $x$ estimate from Gibbs sampling is shown in Fig. 2 and we compare the gender, smoking effects as well as combined effects. From the data, the gender plays a much more important role in the re-admission time for the patients; male patients tend to have re-admission time of $2.37$ compare to $6.77$ of female patients. As expected smokers have shorter re-admission time. Therefore, using the Poisson likelihood and Gibbs sampling, we report that
+\begin{equation}
+x(\text{Female Nonsmoker}) > x(\text{Female Ssmoker}) > x(\text{Male Nonsmoker}) > x(\text{Male Smoker})
+\end{equation}
 
 
 
