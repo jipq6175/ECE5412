@@ -221,6 +221,31 @@ x(\text{Female Nonsmoker}) > x(\text{Female Ssmoker}) > x(\text{Male Nonsmoker})
 
 \section*{Problem 59}
 
+The nonlinear stochastic system is defined as the following. 
+\begin{equation}
+x_{k+1} = \sin(x_k) + x_k \quad w\sim N(0, \Sigma)
+\end{equation}
+Let the initial density of $x_0$ be $\pi_0(x)$ and we can write the transition probability from time $k$ to time $k+1$ as 
+\begin{equation}
+P(x_{k+1}|x_k) = N(x_{k+1} - \sin(x_k), \Sigma)
+\end{equation}
+By Chapman-Komogorov equation, the density of $x_{k+1}$ is $\pi_{k+1}(x_{k+1})$:
+\begin{equation}
+\pi_{k+1}(x_{k+1}) = \int P(x_{k+1}|x_k)\pi_k(x_k)dx_k
+\end{equation}
+
+Instead of doing the integration, we can simulate $x_{k+1}$'s using the composite method by knowing both $P(x_{k+1}|x_k)$ and $\pi_k(x_k)$. 
+\begin{enumerate}
+\item Generate $x_k^* \sim \pi_k(x_k)$ 
+\item Generate $x_{k+1}^* \sim P(x_{k+1}|x_k^*)$
+\end{enumerate}
+The density of simulated $x_{k+1}^*$'s, $\hat{\pi}_{k+1}(x_{k+1})$ will converge to $\pi_{k+1}(x_{k+1})$. Using this simulated density, we can repeat the same procedure for $k+2$, $k+3$, etc. Note that we will have to generate $x_{k+1}^*$ from the empirical density $\hat{\pi}_{k+1}(x_{k+1})$ but the simulated $x_{k+1}^*$ is already determined. Therefore, to simulate this system for $k=1, 2, 3$, we use the following simplified procedure. 
+\begin{enumerate}
+\item Generate $x_0^* \sim \pi_0(x_0)$.
+\item Generate $x_{1}^* \sim P(x_1|x_0^*) \to$ find density, mean and covariance, $k=1$. 
+\item Generate $x_{2}^* \sim P(x_2|x_1^*) \to$ find density, mean and covariance, $k=2$.
+\item Generate $x_{3}^* \sim P(x_3|x_2^*) \to$ find density, mean and covariance, $k=3$.
+\end{enumerate}
 
 
 
