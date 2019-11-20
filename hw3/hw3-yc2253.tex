@@ -330,11 +330,52 @@ For the second simulation,
 
 \section*{Problem 62}
 
+Suppose we have the transition matrix $p\in\mathbb{R}^{3\times 3}$ for the Markov Chain $x_k$ in state space $\{0, 10, 20\}$ and let $\pi_k(i) = P(x_k=i|y_{1:k})$. Now the observation of the Markov Chain is noisy: 
+\begin{equation}
+y_{k} = x_k + w \quad w\sim N(0, \sigma^2)
+\end{equation}
+
+\subsection*{(a)}
+
+The probability of observation $y_k$ given state at $x_k$ is 
+\begin{equation}
+P(y_k|x_k) = N(x_k, \sigma^2)
+\end{equation}
+Note that $x_k$ is discrete from a 3-state Markov Chain while $y_k$ is a continuous observation. We apply the Hidden Markov Model (HMM) Filter using the following state estimate $\pi_{k+1}$ given observation $y_{1:k+1}$: 
+\begin{equation}
+\pi_{k+1} = \frac{B_{y_{k+1}}P'\pi_k}{\mathbf{1}'B_{y_{k+1}}P'\pi_k} \quad B_{y_k} = \begin{bmatrix}
+P(y_k|x_k=0) & 0 & 0 \\
+0 & P(y_k|x_k=10) & 0 \\
+0 & 0 & P(y_k|x_k=20)
+\end{bmatrix}
+\end{equation}
+Let $S = (0, 10, 20)'$ be the state vector. The optimal estimate from the HMM filter is
+\begin{equation}
+\hat{x}_{k+1} = S'\pi_{k+1}
+\end{equation}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.5in]{p62.png}
+		\caption{Problem 62: The simulated noisy measurements $y_k$ (blue) of Markov Chain states $x_k$ (black) using $\sigma^2=1$, $\sigma^2=2$ and $\sigma^2=5$. The red dashed traces represents the estimates from HMM filter. The magenta dots indicate the time $k$ when the HMM estimate $\hat{x}_k$ does not agree with the true state $x_k$. } 
+	\end{center}
+\end{figure}
+
+The traces of the simulated Markov Chain $x_k$ and the noisy observations $y_k$ with $\sigma^2 = 1,2,5$ are shown as blue and black respectively in Fig. 5. The trace of estimate from HMM filter, $\hat{x}_k$ is shown in the red dashed line. In general, HMM filter performs very well in this case, where for different observation noises, the most of the estimates recapitulate the hidden Markov Chain. We indicate the disagreement using the magenta dots in Fig. 5 and with increasing $\sigma^2$, the error occurs more frequently due to the high noisy once in a while. We report the error rate $r$ for three different cases as the following. 
+\begin{equation}
+\begin{split}
+\sigma^2 = 1 \quad & r = 0.00\% \\
+\sigma^2 = 2 \quad & r = 0.20\% \\
+\sigma^2 = 5 \quad & r = 5.50\% \\
+\end{split}
+\end{equation}
+The good performance is also due to the fact that the differences between the Markov states are big enough that the noises do not corrupt the signal significantly even for the case where $\sigma^2=5$. 
 
 
+\subsection*{(b)}
 
 \section*{Attachments}
-\textit{p37.m, ar2simulate.m, arestimate.m, rls.m}
+\textit{to be updated}
 
 
 
