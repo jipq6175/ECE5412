@@ -72,3 +72,7 @@ plot(k((round(est)-x)~=0), est((round(est)-x)~=0), 'm.', 'MarkerSize', 20)
 ylim([-5 25]);
 hold off;
 title('\sigma^2 = 5');
+
+
+
+%% smoother
