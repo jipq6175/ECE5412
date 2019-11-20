@@ -227,7 +227,7 @@ x_{k+1} = \sin(x_k) + x_k \quad w\sim N(0, \Sigma)
 \end{equation}
 Let the initial density of $x_0$ be $\pi_0(x)$ and we can write the transition probability from time $k$ to time $k+1$ as 
 \begin{equation}
-P(x_{k+1}|x_k) = N(x_{k+1} - \sin(x_k), \Sigma)
+P(x_{k+1}|x_k) = N(\sin(x_k), \Sigma)
 \end{equation}
 By Chapman-Komogorov equation, the density of $x_{k+1}$ is $\pi_{k+1}(x_{k+1})$:
 \begin{equation}
@@ -246,6 +246,79 @@ The density of simulated $x_{k+1}^*$'s, $\hat{\pi}_{k+1}(x_{k+1})$ will converge
 \item Generate $x_{2}^* \sim P(x_2|x_1^*) \to$ find density, mean and covariance, $k=2$.
 \item Generate $x_{3}^* \sim P(x_3|x_2^*) \to$ find density, mean and covariance, $k=3$.
 \end{enumerate}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.5in]{p59.png}
+		\caption{Problem 59: The densities of $x_0$, $x_1$, $x_2$ and $x_3$ from 2 simulations with $\Sigma_1$ and $\Sigma_2$.  } 
+	\end{center}
+\end{figure}
+
+To run the simulation, suppose that $x$ is a normally distributed two-dimensional random vector with mean $\mu$ and covariance $I_2$, i.e. $x\sim N_2(\mu, I_2)$, where $\mu = (3, -2)'$ to demonstrate the non-linearity of the problem. We choose the two-dimensional example for the ease of visualization. We ran two simulations with different $\Sigma$'s:
+\begin{equation}
+\Sigma_1 = \begin{bmatrix}
+1 & 1.5 \\
+1.5 & 3
+\end{bmatrix} \quad \Sigma_2 = \begin{bmatrix}
+1 & -0.8 \\
+-0.8 & 0.9
+\end{bmatrix}
+\end{equation}
+and the simulated densities are shown in Fig. 3. We report the statistics as follows. 
+
+For the first simulation, 
+\begin{equation}
+\bar{x_1} = \begin{bmatrix}
+0.0923 \\
+-0.5368
+\end{bmatrix} \quad \bar{x_2} = \begin{bmatrix}
+0.0527 \\
+-0.1024
+\end{bmatrix} \quad \bar{x_3} = \begin{bmatrix}
+0.0281 \\
+-0.0127
+\end{bmatrix}
+\end{equation}
+
+\begin{equation}
+\text{cov}(x_1) = \begin{bmatrix}
+1.42 & 1.49 \\
+1.49 & 3.21
+\end{bmatrix} \quad \text{cov}(x_2) = \begin{bmatrix}
+1.48 & 1.67 \\
+1.67 & 3.49
+\end{bmatrix} \quad \text{cov}(x_3) = \begin{bmatrix}
+1.49 & 1.72 \\
+1.72 & 3.50
+\end{bmatrix}
+\end{equation}
+
+For the second simulation, 
+\begin{equation}
+\bar{x_1} = \begin{bmatrix}
+0.1034 \\
+-0.5611
+\end{bmatrix} \quad \bar{x_2} = \begin{bmatrix}
+0.0506 \\
+-0.3136
+\end{bmatrix} \quad \bar{x_3} = \begin{bmatrix}
+0.0418 \\
+-0.1974
+\end{bmatrix}
+\end{equation}
+
+\begin{equation}
+\text{cov}(x_1) = \begin{bmatrix}
+1.46 & -0.82 \\
+-0.82 & 1.13
+\end{bmatrix} \quad \text{cov}(x_2) = \begin{bmatrix}
+1.47 & -1.01 \\
+-1.01 & 1.29
+\end{bmatrix} \quad \text{cov}(x_3) = \begin{bmatrix}
+1.50 & -1.10 \\
+-1.10 & 1.36
+\end{bmatrix}
+\end{equation}
 
 
 
