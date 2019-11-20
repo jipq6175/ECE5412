@@ -75,4 +75,50 @@ title('\sigma^2 = 5');
 
 
 
-%% smoother
+%% smoother function Viterbi
+figure(2); 
+subplot(3,1,1);
+hold all; 
+plot(y1, 'LineWidth', 2.0);
+plot(x, 'k', 'LineWidth', 3.0);
+idx = round(y1/10)+1;
+plot(s(idx), 'r--', 'LineWidth', 1.0);
+ylim([-5 25]);
+hold off;
+title('\sigma^2 = 1');
+
+subplot(3,1,2);
+hold all; 
+plot(y2, 'LineWidth', 2.0);
+plot(x, 'k', 'LineWidth', 3.0);
+idx = round(y2/10)+1;
+idx(idx==0) = 1;
+plot(s(idx), 'r--', 'LineWidth', 1.0);
+plot(k((s(idx)-x)~=0), est((s(idx)-x~=0)), 'm.', 'MarkerSize', 20)
+ylim([-5 25]);
+hold off;
+title('\sigma^2 = 2');
+
+subplot(3,1,3);
+hold all; 
+plot(y3, 'LineWidth', 2.0);
+plot(x, 'k', 'LineWidth', 3.0);
+idx = round(y3/10)+1;
+idx(idx==0) = 1;
+idx(idx>3) = 3;
+plot(s(idx), 'r--', 'LineWidth', 1.0);
+plot(k((s(idx)-x)~=0), est((s(idx)-x)~=0), 'm.', 'MarkerSize', 20)
+ylim([-5 25]);
+hold off;
+title('\sigma^2 = 5');
+
+
+%%
+display(100 - sum((s(round(y1/10)+1) - x) == 0)/10)
+idx = round(y2/10)+1;
+idx(idx==0) = 1;
+display(100 - sum((s(idx) - x) == 0)/10)
+idx = round(y3/10)+1;
+idx(idx==0) = 1;
+idx(idx>3) = 3;
+display(100 - sum((s(idx) - x) == 0)/10)

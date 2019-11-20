@@ -357,7 +357,7 @@ Let $S = (0, 10, 20)'$ be the state vector. The optimal estimate from the HMM fi
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=6.5in]{p62.png}
-		\caption{Problem 62: The simulated noisy measurements $y_k$ (blue) of Markov Chain states $x_k$ (black) using $\sigma^2=1$, $\sigma^2=2$ and $\sigma^2=5$. The red dashed traces represents the estimates from HMM filter. The magenta dots indicate the time $k$ when the HMM estimate $\hat{x}_k$ does not agree with the true state $x_k$. } 
+		\caption{Problem 62(a): The simulated noisy measurements $y_k$ (blue) of Markov Chain states $x_k$ (black) using $\sigma^2=1$, $\sigma^2=2$ and $\sigma^2=5$. The red dashed traces represents the estimates from HMM filter. The magenta dots indicate the time $k$ when the HMM estimate $\hat{x}_k$ does not agree with the true state $x_k$. } 
 	\end{center}
 \end{figure}
 
@@ -373,6 +373,23 @@ The good performance is also due to the fact that the differences between the Ma
 
 
 \subsection*{(b)}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.5in]{p62b.png}
+		\caption{Problem 62(b): The simulated noisy measurements $y_k$ (blue) of Markov Chain states $x_k$ (black) using $\sigma^2=1$, $\sigma^2=2$ and $\sigma^2=5$. The red dashed traces represents the estimates from fixed interval smoothed estimate (FISE) using the Viterbi algorithm. The magenta dots indicate the time $k$ when the FISE estimate $\hat{x}_k$ does not agree with the true state $x_k$. } 
+	\end{center}
+\end{figure}
+
+We further use a fixed interval smoothed estimate (FISE) for the Markov state $x_k$ using the Viterbi algorithm. In the Viterbi algorithm, we have to maximize the likelihood $P(y_{1:k}, x_{1:k})$ and since the Markov state $x_k$ is equally spaced with the same observation noise variance, the maximum-likelihood estimate for state at time $k$ given observation $y_k$ is essentially rounding the observation to the closest state. The red dashed lines in Fig. 6 demonstrate the traces FISE from the same observations $y_{1:1000}$. Using the same plotting scheme, we label the disagreement between FISE and real state by the magenta dots and report the error rates as the following. 
+\begin{equation}
+\begin{split}
+\sigma^2 = 1 \quad & r = 0.00\% \\
+\sigma^2 = 2 \quad & r = 0.10\% \\
+\sigma^2 = 5 \quad & r = 1.30\% \\
+\end{split}
+\end{equation}
+
 
 \section*{Attachments}
 \textit{to be updated}
