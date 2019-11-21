@@ -362,10 +362,25 @@ S_{k+1} & = C\Sigma_{k+1|k}C'+R\\
 \end{equation}
 
 
+\begin{figure}
+\centering
+\begin{subfigure}[]{}
+   \includegraphics[width=6.5in]{p61_1.png}
+\end{subfigure}
+
+\begin{subfigure}[]{}
+   \includegraphics[width=6.5in]{p61_2.png}
+\end{subfigure}
+
+\begin{subfigure}[]{}
+   \includegraphics[width=6.5in]{p61_3.png}
+\end{subfigure}
+
+\caption{Problem 61: Simulated positions (black traces in the left 2 panels), velocities traces (blue and red in the right panel) and noisy observations (blue in the left panel) using Eq. (36) and (37). The position traces of KF estimate are shown as red dashed lines in the middle panel while the KF estimate of velocities are shown as cyan and magenta in the right panel. We use three different noise levels: $\sigma^2R$ with (a) $\sigma^2=1$, (b) $\sigma^2=5$ and (c) $\sigma^2=10$.}
+\end{figure}
 
 
-
-
+We simulate the observations using three different noise levels $\sigma^2R$ where $\sigma^2R$ with $\sigma^2=1,5,10$. The results are shown in Fig. 4. The KF filter works very well even in the most noisy case; the KF estimates still recapitulate the positions of the target. It is interesting to note that the KF estimates for the velocities are not as good as the positions because in the observation matrix $C$, we do not observe the velocities. However, the KF estimates of the velocities seem to be insensitive to the observation noise because the velocities are inferred instead of being corrupted measurements. This problem demonstrate decent performance of Kalman Filter even though the observation is highly noisy. 
 
 
 
