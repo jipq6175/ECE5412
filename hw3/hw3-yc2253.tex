@@ -325,6 +325,50 @@ For the second simulation,
 
 \section*{Problem 61}
 
+Denote the state in the phase space as $z_k = (x_k,\dot{x}_k, y_k, \dot{y}_k)'$ and acceleration $r_{k+1} = (\ddot{x}_{k}, \ddot{y}_{k})'$, which will be deemed as a constant $r$. The state and the observation models are the following. 
+\begin{equation}
+z_{k+1} = Az_k+fr_{k+1}+w_k \quad w_k\sim(0, Q)\quad k=0,1,\dots
+\end{equation}
+\begin{equation}
+y_k = Cz_k+v_k \quad v_k\sim N(0, R)
+\end{equation}
+where 
+\begin{equation}
+A = \begin{bmatrix}
+1 & \Delta & 0 & 0\\
+0& 1 & 0 & 0\\
+0 & 0 & 1 & \Delta\\
+0 & 0 & 0 & 1\\
+\end{bmatrix}\quad f = \begin{bmatrix}
+\Delta^2/2 & 0 \\
+\Delta & 0 \\
+0 & \Delta^2/2 \\
+0 & \Delta\\
+\end{bmatrix}\quad C = \begin{bmatrix}
+1 & 0 & 0 & 0\\
+0 & 0& 1 & 0
+\end{bmatrix}
+\end{equation}
+and $\Delta$ is the sampling period. We will use Kalman Filter (KF) to estimate the state $x_k$ given observations $y_k$. We write the recursive KF equations as the following. 
+\begin{equation}
+\begin{split}
+\hat{z}_{k+1|k} & = A\hat{z}_k + fr \\
+y_{k+1|k} & = C\hat{z}_{k+1|k} \\
+\Sigma_{k+1|k} & = A\Sigma_kA'+Q\\
+S_{k+1} & = C\Sigma_{k+1|k}C'+R\\
+\hat{z}_{k+1} & = \hat{z}_{k+1|k} + \Sigma_{k+1|k}C'S_{k+1}^{-1}(y_{k+1} - y_{k+1|k})\\
+\Sigma_{k+1} & = \Sigma_{k+1|k}C'S_{k+1}^{-1}C\Sigma_{k+1|k}
+\end{split}
+\end{equation}
+
+
+
+
+
+
+
+
+
 
 
 
