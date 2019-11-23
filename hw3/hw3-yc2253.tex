@@ -455,8 +455,66 @@ We further use a fixed interval smoothed estimate (FISE) for the Markov state $x
 
 \newpage
 
+
+
 \section*{Metropolis-Hastings Algorithm on Hierarchical Bayesian Models}
 
-In this section, we will explore and model the volatility in the U.S. stock market. In finance, the volatility is defined as the variation of a trading price or composite index time series as measured by the standard deviation of the logarithmic returns. If the stock price fluctuates significantly, the volatility is high and any investment in such stock incurs high risk. On the other hand, if the stock price does not have a great swing, the volatility is low. According to Wikipedia[1], it's still unclear how the volatility comes to exist in the first place and therefore, it's hard to model. 
+In this section, we will explore and model the volatility in the U.S. stock market. In finance, the volatility is defined as the variation of a trading price or composite index time series as measured by the standard deviation of the logarithmic returns. If the stock price fluctuates significantly, the volatility is high and any investment in such stock incurs high risk. On the other hand, if the stock price does not have a great swing, the volatility is low. According to Wikipedia, it is still unclear how the volatility comes to exist in the first place and therefore, it is hard to model. One of the most popular and consistent measure of stock market volatility is the CBOE Volatility Index (VIX). The VIX is the future implied volatility of the Standard and Poor 500 (SP500) Index based on the current price. Fig. 7 shows the VIX and SP500 Index of the last 10 years from 2009/11/22 to 2019/11/22. The $x$ axes are the number of trading days since 2009/11/22. It is clear that whenever the SP500 experienced a plunge, the implied volatility, VIX spiked. 
+
+ 
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.5in]{p57a.png}
+		\caption{The historical SP500 Index and VIX. } 
+	\end{center}
+\end{figure}
+
+
+Inspired by the concept of Markov Modulated Poisson Model mentioned very briefly in the class. We came up with this original and simple model for the VIX using the combination of Poisson distribution and hierarchical Bayesian model. Suppose the market volatility is a Markov Chain $x_k$ at time $k$ and assume that this Markov Chain changes state on a weekly instead of daily basis with transition matrix $P$. We have no information about the structure of $P$ but we will use the VIX index to estimate $P$. During the time period $k$ and $k+1$, we have $l$ observations $y_{k,1}, y_{k,2}, \dots, y_{k,l}$ of the market volatility by VIX. We formulate the hierarchical Bayesian model as the following. The VIX from time $k$ and $k+1$ follows the Poisson distribution, from the real market volatility $x_k$. 
+\begin{equation}
+P(y_{k,i}|x_k) = \frac{e^{-x_k}x_k^{y_{k,i}}}{y_{k,i}!} \quad \Longrightarrow \quad P(y_{k,1:l}|x_k) = \prod_{i=1}^l\frac{e^{-x_k}x_k^{y_{k,i}}}{y_{k,i}!}
+\end{equation}
+Formally, we have to model $x_k$ using the intrinsic transition probability $P$  such that $\pi_{k} = P'\pi_{k-1}$, but $P$ is unknown to us. Instead, we use the fact that the state $x_k$ is not far away from the previous state $x_{k+1}$. Therefore, we model $x_k$ as a normal distribution centered on the previous state $x_{k-1}$ with some unknown variance $\theta$. 
+\begin{equation}
+x_k|\theta \sim N(x_{k-1}, \sigma^2=\theta) \quad \Longrightarrow \quad P(x_k|\theta) = \frac{1}{\sqrt{2\pi\theta}}e^{-\frac{1}{2\theta}(x_k - x_{k-1})^2}
+\end{equation}
+Finally, assume that the variance $\theta$ has the improper prior distribution $1/\theta$ and we have the posterior distribution as follows.
+\begin{equation}
+\begin{split}
+P(x_k|y_{k,1:l}) & \propto \int P(y_{k,1:l}|x_k)P(x_k|\theta)p(\theta)d\theta\\
+ & \propto \int \prod_{i=1}^l\left( \frac{e^{-x_k}x_k^{y_{k,i}}}{y_{k,i}!}\right) \left[\frac{1}{\sqrt{2\pi\theta}}e^{-\frac{1}{2\theta}(x_k - x_{k-1})^2}\right] \left(\frac{1}{\theta}\right)d\theta
+\end{split}
+\end{equation}
+
+The aim is to obtain the estimate $\hat{x}_k = E(x_k|y_{k,1:l})$ but Eq. (48) is difficult to integrate to get the posterior distribution. Therefore, we run the Metropolis-Hastings Algorithm described as follows to obtain the empirical posterior distribution. Suppose we have a initial sample $\bar{z} = (\bar{x}, \bar{\theta})'$. 
+
+\begin{enumerate}
+\item Generate the new sample $z$ from $q(z|\bar{z})$, where $q(z|\bar{z}) = q(\bar{z}|z)$ is symmetric.
+\begin{equation}
+q(z|\bar{z}) \sim N(\bar{z}, \sigma^2I_2)
+\end{equation}
+
+\item Calculate the acceptance probability $\alpha_{\bar{z}, z}$.
+\begin{equation}
+\alpha_{\bar{z}, z} = \min\left(1, \frac{P(y_{k,1:l}|x)P(x|\theta)p(\theta)}{P(y_{k,1:l}|\bar{x})P(\bar{x}|\bar{\theta})p(\bar{\theta})} \right)
+\end{equation}
+
+\item Generate $u\sim \text{U}[0,1]$ and accept $z$ if $u < \alpha_{\bar{z}, z}$.
+\end{enumerate} 
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.5in]{p57b.png}
+		\caption{Application of Metropolis-Hastings algorithms for estimating the market volatility using 2 short periods (blue and red) of 14 trading days. The cyan line represent the estimated state $\hat{x}_k$ using the observed VIX and the cyan dashed lines represent the standard deviation in the $\hat{x}_k$. The histogram shows the empirical distribution of samples from the MH algorithm. The same plotting scheme applies to the red period during the low volatility era. } 
+	\end{center}
+\end{figure}
+
+We tested the Metropolis-Hastings algorithm using 2 periods of the VIX, shown in the top panel of Fig. 8. The MH algorithm performs well in estimating the market volatility using the hierarchical Bayesian model. 
+
+
+
+
+
+
 
 \end{document}
