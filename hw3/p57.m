@@ -65,10 +65,16 @@ xlabel('estimate state x')
 
 
 %% 
-stat = zeros([2508 2]);
-n = 20000;
-for i = 1:2508
-    x = mhvix(m(i:i+10), m(i), n);
+w = 30;
+stat = zeros([2517-w 2]);
+n = 5000;
+for i = 1:2517-w
+    display(['Time k = ' num2str(i) ' ....']);
+    if i == 1
+        x = mhvix(m(i:i+w), mean(m(i:i+w)), n);
+    else
+        x = mhvix(m(i:i+w), stat(i), n);
+    end
     stat(i, :) = [mean(x(:,1)) std(x(:,1))];
 end
 

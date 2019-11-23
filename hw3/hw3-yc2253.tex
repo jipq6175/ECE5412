@@ -509,8 +509,10 @@ q(z|\bar{z}) \sim N(\bar{z}, \sigma^2I_2)
 	\end{center}
 \end{figure}
 
-We tested the Metropolis-Hastings algorithm using 2 periods of the VIX, shown in the top panel of Fig. 8. The MH algorithm performs well in estimating the market volatility using the hierarchical Bayesian model. 
+We tested the Metropolis-Hastings algorithm using 2 periods of the VIX and 50000 samples, shown in the top panel of Fig. 8. The MH algorithm performs well in estimating the market volatility using the hierarchical Bayesian model. It is worth noting that for the high-volatility period (blue), the previous Markov state is at about 30 but given enough number of MH samples, the true posterior distribution is still recapitulated. 
 
+
+Now we can estimate the state of hidden Markov Chain that determines the Poisson distribution of the VIX. Our goal is to estimate the transition probability of market volatility. We can do this by estimating the states for the full VIX time series using a period of two weeks (10 trading days).  
 
 
 
