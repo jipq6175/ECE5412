@@ -459,7 +459,7 @@ We further use a fixed interval smoothed estimate (FISE) for the Markov state $x
 
 \section*{Metropolis-Hastings Algorithm on Hierarchical Bayesian Models}
 
-In this section, we will explore and model the volatility in the U.S. stock market. In finance, the volatility is defined as the variation of a trading price or composite index time series as measured by the standard deviation of the logarithmic returns. If the stock price fluctuates significantly, the volatility is high and any investment in such stock incurs high risk. On the other hand, if the stock price does not have a great swing, the volatility is low. According to Wikipedia, it is still unclear how the volatility comes to exist in the first place and therefore, it is hard to model. One of the most popular and consistent measure of stock market volatility is the CBOE Volatility Index (VIX). The VIX is the future implied volatility of the Standard and Poor 500 (SP500) Index based on the current price. Fig. 7 shows the VIX and SP500 Index of the last 10 years from 2009/11/22 to 2019/11/22. The $x$ axes are the number of trading days since 2009/11/22. It is clear that whenever the SP500 experienced a plunge, the implied volatility, VIX spiked. 
+In this section, we will explore and model the volatility in the U.S. stock market. In finance, the volatility is defined as the variation of a trading price or composite index time series as measured by the standard deviation of the logarithmic returns[1]. If the stock price fluctuates significantly, the volatility is high and any investment in such stock incurs high risk. On the other hand, if the stock price does not have a great swing, the volatility is low. According to Wikipedia, it is still unclear how the volatility comes to exist in the first place and therefore, it is hard to model. One of the most popular and consistent measure of stock market volatility is the CBOE Volatility Index (VIX). The VIX is the future implied volatility of the Standard and Poor 500 (SP500) Index based on the current price[2]. We download the daily 10-year historical data for VIX and SP500 Index from Yahoo Finance[3]. Fig. 7 shows the VIX and SP500 Index of the last 10 years from 2009/11/22 to 2019/11/22. The $x$ axes are the number of trading days since 2009/11/22. It is clear that whenever the SP500 experienced a plunge, the implied volatility, VIX spiked. 
 
  
 \begin{figure}
@@ -512,10 +512,30 @@ q(z|\bar{z}) \sim N(\bar{z}, \sigma^2I_2)
 We tested the Metropolis-Hastings algorithm using 2 periods of the VIX and 50000 samples, shown in the top panel of Fig. 8. The MH algorithm performs well in estimating the market volatility using the hierarchical Bayesian model. It is worth noting that for the high-volatility period (blue), the previous Markov state is at about 30 but given enough number of MH samples, the true posterior distribution is still recapitulated. 
 
 
-Now we can estimate the state of hidden Markov Chain that determines the Poisson distribution of the VIX. Our goal is to estimate the transition probability of market volatility. We can do this by estimating the states for the full VIX time series using a period of two weeks (10 trading days).  
+%\begin{figure}
+%	\begin{center}
+%		\includegraphics[width=6.5in]{p57c.png}
+%		\caption{Estimated market volatility using VIX observations within a 2-week window. This estimated market volatility can be used to estimated the transition probability of underlying Markov Chain, $P$.} 
+%	\end{center}
+%\end{figure}
+
+
+Now we can estimate the state of hidden Markov Chain that determines the Poisson distribution of the VIX. Our goal is to estimate the transition probability of market volatility. We can do this by estimating the states for the full VIX time series using a period of two weeks (10 trading days). The result is shown in Fig. 9 where we show the estimated market volatility along with the corresponding standard deviations. Using this estimated state of the Markov Chain, be can further estimate the transition probability $P$. 
 
 
 
+
+
+\section*{References}
+\begin{enumerate}
+\item https://en.wikipedia.org/wiki/Volatility\_(finance)
+\item https://en.wikipedia.org/wiki/VIX
+\item https://finance.yahoo.com/
+\end{enumerate}
+
+
+\section*{Disclaimer}
+This is a purely simple demonstration and academic analysis. The reader may use the content at his/her/its own risk and the reader shall have no claims whatsoever against the author. 
 
 
 

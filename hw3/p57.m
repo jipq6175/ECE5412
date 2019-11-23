@@ -79,3 +79,14 @@ for i = 1:2517-w
 end
 
 %%
+
+
+figure(3);
+plot(vix(:,1), 'k', 'LineWidth', 2.0);
+hold on; 
+errorbar(1:30:2487, stat(1:30:2487, 1)/10, stat(1:30:2487, 2)/10, 'r.'); 
+legend('VIX', 'Estimated Volatility State');
+xlim([1 2500]);
+
+
+%%
