@@ -65,17 +65,17 @@ xlabel('estimate state x')
 
 
 %% 
-w = 30;
+w = 10;
 stat = zeros([2517-w 2]);
-n = 5000;
+n = 25000;
 for i = 1:2517-w
-    display(['Time k = ' num2str(i) ' ....']);
     if i == 1
         x = mhvix(m(i:i+w), mean(m(i:i+w)), n);
     else
         x = mhvix(m(i:i+w), stat(i), n);
     end
-    stat(i, :) = [mean(x(:,1)) std(x(:,1))];
+    stat(i, :) = [mean(x(:,1))/10 std(x(:,1))/10];
+    display(['Time k = ' num2str(i) ': estimate = ' num2str(stat(i, 1)) ' ....']);
 end
 
 %%
@@ -84,9 +84,41 @@ end
 figure(3);
 plot(vix(:,1), 'k', 'LineWidth', 2.0);
 hold on; 
-errorbar(1:30:2487, stat(1:30:2487, 1)/10, stat(1:30:2487, 2)/10, 'r.'); 
+errorbar(1:30:2507, stat(1:30:2507, 1), 0.5*stat(1:30:2507, 2), 'ro', 'LineWidth', 2); 
 legend('VIX', 'Estimated Volatility State');
 xlim([1 2500]);
-
+ylim([5 50])
 
 %%
+
+mc = round(stat(:,1));
+mc2 = zeros([length(mc) 1]);
+states = unique(mc);
+for i = 1:length(mc)
+    mc2(i) = find(states == mc(i)); 
+end
+
+m = max(mc2);
+n = numel(mc2);
+y = zeros(m,1);
+p = zeros(m,m);
+for k=1:n-1
+    y(mc2(k)) = y(mc2(k)) + 1;
+    p(mc2(k),mc2(k+1)) = p(mc2(k),mc2(k+1)) + 1;
+end
+p = bsxfun(@rdivide,p,y); p(isnan(p)) = 0;
+
+figure(4); 
+subplot(1,2,1);
+plot(mc2, 'k-.', 'LineWidth', 2);
+ylabel('Volatility State'); 
+xlabel('time')
+xlim([0 2510])
+
+subplot(1,2,2); 
+surf(p); 
+xlabel('Previous Volatility');
+ylabel('Next Volatility'); 
+zlabel('Probability');
+xlim([0 17]);
+ylim([0 17]);

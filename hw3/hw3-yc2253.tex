@@ -512,16 +512,41 @@ q(z|\bar{z}) \sim N(\bar{z}, \sigma^2I_2)
 We tested the Metropolis-Hastings algorithm using 2 periods of the VIX and 50000 samples, shown in the top panel of Fig. 8. The MH algorithm performs well in estimating the market volatility using the hierarchical Bayesian model. It is worth noting that for the high-volatility period (blue), the previous Markov state is at about 30 but given enough number of MH samples, the true posterior distribution is still recapitulated. 
 
 
-%\begin{figure}
-%	\begin{center}
-%		\includegraphics[width=6.5in]{p57c.png}
-%		\caption{Estimated market volatility using VIX observations within a 2-week window. This estimated market volatility can be used to estimated the transition probability of underlying Markov Chain, $P$.} 
-%	\end{center}
-%\end{figure}
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.5in]{p57c.png}
+		\caption{Estimated market volatility using VIX observations within a 2-week window. This estimated market volatility can be used to estimated the transition probability of underlying Markov Chain, $P$.} 
+	\end{center}
+\end{figure}
 
 
 Now we can estimate the state of hidden Markov Chain that determines the Poisson distribution of the VIX. Our goal is to estimate the transition probability of market volatility. We can do this by estimating the states for the full VIX time series using a period of two weeks (10 trading days). The result is shown in Fig. 9 where we show the estimated market volatility along with the corresponding standard deviations. Using this estimated state of the Markov Chain, be can further estimate the transition probability $P$. 
 
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.5in]{p57d.png}
+		\caption{Estimated market volatility states and estimated the transition probability of underlying Markov Chain.} 
+	\end{center}
+\end{figure}
+
+The estimated market volatility state and the transition probability of the underlying Markov Chain $P$ is shown in Fig. 9. The states of $1,2,\dots, 9$ correspond to the low volatility states. The states of $10, 11, \dots, 14$ are medium volatility whereas state $15, 16$ are high volatility states where the investor's panic permeated the market. We see that in the low-volatility states, investors are confident about the market and the market remains in the low-volatility states more often. However, once in a while, the panic kicked in and the volatility went up step by step until hitting state $10, 11, 12$, where there is a high chance that the market makes transition to the high-volatility states, $15, 16$. And market plunged. These high-volatility states are very unstable in the sense that it is difficult for the market to keep its high volatility. 
+
+
+The current stock market is in the low-volatility state $7$. The probability of the market going to state $6$ (low volatility) is $0.0861$ while high-volatility with probability is $0.1030$ with $P(\text{future}=10|\text{now}=7) = 0.0150$. The expected future volatility is 12.2, at the verge of high-volatility. 
+
+
+Interestingly, the stationary distribution of this simplified model for the market volatility is 
+\begin{equation}
+\pi_\infty = \begin{bmatrix}
+P(\text{low})\\
+P(\text{medium})\\
+P(\text{high})
+\end{bmatrix} = \begin{bmatrix}
+0.6494 \\
+0.2673 \\
+0.0833
+\end{bmatrix}
+\end{equation}
 
 
 

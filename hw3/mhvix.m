@@ -9,14 +9,14 @@ for i = 1:n
     
     % the proposed distribution
     t0 = x(i, :);
-%     while 1
-%         t1 = mvnrnd(t0, 0.01*eye(2));
-%         if t1(1) > 0; 
-%             break;
-%         end
-%     end
+    while 1
+        t1 = mvnrnd(t0, 0.01*eye(2));
+        if t1(1) > 0; 
+            break;
+        end
+    end
     
-    t1 = mvnrnd(t0, 0.01*eye(2));
+    %t1 = mvnrnd(t0, 0.01*eye(2));
     
     r1 = prod(poisspdf(y, t0(1)) ./ poisspdf(y, t1(1)));
     r2 = normpdf(t0(1), x0, t0(1)^2) / normpdf(t1(1), x0, t1(1)^2);
