@@ -1,6 +1,6 @@
 % Question 1
 
-%% Question 1(c)
+%% Question 1(c)()
 
 A = 2.5; 
 w = 2*pi/60; 
@@ -34,6 +34,7 @@ title('Error');
 
 
 %% Question 1(d)
+
 nsim = 50;
 mse = zeros(nsim, 1);
 for i = 1:nsim
@@ -45,3 +46,38 @@ end
 
 display(mean(mse));
 display(std(mse));
+
+
+%% Question 1(e)
+
+y = q1generate(A, w, n);
+y_hat = q1filter(y, A, w, rand());
+% smoother 
+y_smooth = q1smoother(y, A, w);
+
+display('Filter MSE = ');
+display(mean((y - y_hat).^2));
+display('Smoother MSE = ');
+display(mean((y - y_smooth).^2));
+
+
+%% Question 1(f)
+% might take a while to run
+mse_filter = zeros(nsim, 1);
+mse_smoother = zeros(nsim, 1);
+tic();
+for i = 1:nsim
+    y = q1generate(A, w, n);
+    y_hat = q1filter(y, A, w, rand());
+    y_smooth = q1smoother(y, A, w);
+    mse_filter(i) = mean((y - y_hat).^2);
+    mse_smoother(i) = mean((y - y_smooth).^2);
+end
+toc(); % about 250 seconds
+
+display('Filter MSE = ');
+display(mean(mse_filter));
+display(std(mse_filter));
+display('Smoother MSE = ');
+display(mean(mse_smoother));
+display(std(mse_smoother));

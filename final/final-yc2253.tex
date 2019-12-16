@@ -65,7 +65,45 @@ We simulated 1000 sensor measurements and then implemented the optimal filter fr
 
 \subsection*{1(d)}
 
-We repeated the process of part (c) for 50 times and found the mean-square-error of the filtered estimate to be $0.623$ with standard deviation of $0.036$. The low standard deviation suggests that the optimal filter is stable. We also found that the mean-square-error increases with smaller amplitude $A$ because the noise is on the same scale and the Markov Chain becomes difficult to uncover.  
+We repeated the process of part (c) for 50 times and found the mean-square-error (MSE) of the filtered estimate to be $0.623$ with standard deviation of $0.036$. The low standard deviation suggests that the optimal filter is stable. We also found that the mean-square-error increases with smaller amplitude $A$ because the noise is on the same scale and the Markov Chain becomes difficult to uncover.  
+
+
+
+\subsection*{1(e)}
+
+For smoother, our goal is to derive the conditional probability $p(s[k]=1|y[1:N])$ where $k \leq N$. 
+\begin{equation}
+p(s[k]=1|y[1:N]) = \frac{p(s[k]=1|y[1:k])p(y[k+1:N]|s[k]=1)}{\sum_{i=1,-1}p(s[k]=i|y[1:k])p(y[k+1:N]|s[k]=i)}
+\end{equation}
+where the first term $p(s[k]=1|y[1:k])$ in the numerator is the forward filtered estimate of time $k$ given observations $y[1:k]$, which is derived and computed in part (b) and (c). The second term $p(y[k+1:N]|s[k]=1)$ is the backward filter and we will derive in the following. 
+\begin{equation}
+\begin{split}
+ & p(y[k+1:N]|s[k]=1) = p(y[k+1], y[k+2:N]|s[k] = 1)\\
+ & = \sum_{j=1,-1} p(y[k+2:N]|y[k+1], s[k+1]=j, s[k]=1)p(y[k+1], s[k+1]=j|s[k]=1)\\
+ & = \sum_{j=1,-1} p(y[k+2:N]|s[k+1]=j)p(y[k+1]|s[k+1]=j)p(s[k+1]=j|s[k]=1)\\
+ & = 0.2 + p(y[k+2:N]|s[k+1]=1)\left[0.8p(y[k+1]|s[k+1]=1)-0.2p(y[k+1]|s[k+1]=-1) \right]
+\end{split}
+\end{equation}
+where $p(y[k]|s[k])$ is given in Eq. (1). Therefore, we have a backward filtering recursion. Define $p_k = p(y[k+1:N]|s[k]=1)$ and $p_N = 1$. We have 
+\begin{equation}
+\begin{split}
+p_k & = 0.2 + p_{k+1}\Bigg\{\frac{0.8}{\sqrt{2\pi}}\exp\left[-\frac{1}{2}\left(y[k+1] - 1 - A\sin(w(k+1)) \right)^2 \right] \\
+ & - \frac{0.2}{\sqrt{2\pi}}\exp\left[-\frac{1}{2}\left(y[k+1] + 1 - A\sin(w(k+1)) \right)^2 \right]  \Bigg\}
+\end{split}
+\end{equation}
+Therefore, the smoother equation in Eq. (5) is then 
+\begin{equation}
+p(s[k]=1|y[1:N]) = \frac{p(s[k]=1)p_k}{p(s[k]=1)p_k + (1-p(s[k]=1))(1-p_k)}
+\end{equation}
+And the quantity $p(s[k]=-1|y[1:N])$ is simply $1-p(s[k]=1|y[1:N])$ for $k = 1,2,\dots, N$.
+
+We implemented the smoother and filter on the same data to compare the MSE of both. The MSE's of the filter and smoother are found to be $0.6302$ and $0.5848$ respectively. The MSE of the smoother is smaller as expected. 
+
+
+
+\subsection*{1(f)}
+
+We repeated the process of part (e) for 50 times and found the mean-square-error (MSE) of the smoother to be $0.591$ with standard deviation of $0.038$. The MSE of the smoother is smaller than that of the optimal filter. 
 
 
 
