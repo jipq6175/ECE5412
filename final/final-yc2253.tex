@@ -15,9 +15,6 @@
 Fall 2019 \hfill Due: 12/20/19 11 am\\
 
 \section*{Question 1}
-
-
-
 \subsection*{1(a)}
 
 
@@ -25,6 +22,35 @@ Fall 2019 \hfill Due: 12/20/19 11 am\\
 
 
 \subsection*{1(b)}
+Since we know that the Markov Chain $s[k]$ has two states: $+1$ and $-1$, it suffices to compute $p(s[k]=1)$. We know the sensor model $y[k] = s[k] + A\sin(wk) + n[k]$ so we have the following conditional probability on measurement. 
+\begin{equation}
+p(y[k]|s[k]) = \frac{1}{\sqrt{2\pi}}\exp\left[-\frac{1}{2}\left(y[k] - s[k] - A\sin(wk) \right)^2 \right]
+\end{equation}
+To derive the optimal filter equations, we start with the state at time $k$: $p(s[k]=1)$ and use Chapman-Kolmogorov equation to obtain the prior at time $k+1$. 
+\begin{equation}
+p(s[k+1]|y[1:k]) = \sum_{s[k]\in \{+1, -1\}} p(s[k+1]|s[k])p(s[k])
+\end{equation}
+\begin{equation}
+\begin{split}
+p(s[k+1]=1|y[1:k]) & = p(s[k+1]=1|s[k]=1)p(s[k]=1) + p(s[k+1]=1|s[k]=-1)p(s[k]=-1) \\
+ & = 0.8 p(s[k]=1) + 0.2(1 - p(s[k]=1)) \\ 
+ & = 0.2 + 0.6 p(s[k]=1)
+\end{split}
+\end{equation}
+And $p(s[k+1]=-1|y[1:k]) = 1- p(s[k+1]=1|y[1:k]) = 0.8 - 0.6 p(s[k]=1)$. Next, we apply Bayes rule to derive $p(s[k+1]=1|y[1:k+1])$. 
+\begin{equation}
+\begin{split}
+ & p(s[k+1]=1|y[1:k+1]) = \frac{p(y[k+1]|s[k+1]=1)p(s[k+1]=1|y[1:k])}{\sum_{s[k+1]\in \{+1, -1\}}p(y[k+1]|s[k+1])p(s[k+1]|y[1:k])}\\
+ & = \frac{p(s[k+1]=1|y[1:k])\exp\left[-\frac{1}{2}\left(y[k+1] - s[k+1] - A\sin(w(k+1)) \right)^2 \right]}{\sum_{s[k+1]\in \{+1, -1\}}p(s[k+1]|y[1:k])\exp\left[-\frac{1}{2}\left(y[k+1] - s[k+1] - A\sin(w(k+1)) \right)^2 \right]} \\ 
+ & = p(s[k+1]=1)
+\end{split}
+\end{equation}
+Eq. (3-4) are the optimal filter equations. 
+
+
+
+\subsection*{1(c)}
+
 
 
 
@@ -36,7 +62,28 @@ Fall 2019 \hfill Due: 12/20/19 11 am\\
 \subsection*{2(a)}
 
 
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.5in]{q2a.png}
+		\caption{Question 2(a): The PDF and CDF from Metropolis-Hastings simulation and true function. }
+	\end{center}
+	\label{fig:q2a}
+\end{figure}
 
+We would like to simulate the following PDF using the random-walk Metropolis-Hastings (MH) algorithm. 
+\begin{equation}
+\pi(x) \propto \cos^2(x)\sin^2(2x)\psi(x) \quad \psi(x) = \mathcal{N}(0,1)
+\end{equation}
+The random-walk MH algorithm is implemented as the following steps. 
+\begin{enumerate}
+\item Given $x_k$, We use the symmetric Gaussian kernel to generate $x_{k+1}$, i.e. $x_{k+1}\sim\mathcal{N}(x_k, 1)$. 
+\item Calculate the acceptance ratio $r$. 
+\begin{equation}
+r = \frac{\cos^2(x_{k+1})\sin^2(2x_{k+1})\psi(x_{k+1})}{\cos^2(x_k)\sin^2(2x_k)\psi(x_k)}
+\end{equation}
+\item Generate $u\sim [0,1]$ and accept $x_{k+1}$ if $u < r$ or go back to step 1. 
+\end{enumerate}
+The simulated PDF and CDF are shown in Fig. \ref{fig:q2a}. 
 
 
 
