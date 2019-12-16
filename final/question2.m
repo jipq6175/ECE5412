@@ -35,7 +35,6 @@ plot(t, p / trapz(t, p), 'r-', 'LineWidth', 1.5)
 hold off
 legend('MH Simulation', 'True PDF');
 title('PDF');
-
 subplot(1,2,2);
 hold all; 
 ecdf(x); 
@@ -45,4 +44,11 @@ legend('MH Simulation', 'True CDF');
 title('CDF');
 
 %%
+
     
+
+
+
+
+
+
