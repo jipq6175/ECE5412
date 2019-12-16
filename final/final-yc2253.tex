@@ -51,6 +51,25 @@ Eq. (3-4) are the optimal filter equations.
 
 \subsection*{1(c)}
 
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.5in]{q1c.png}
+		\caption{Question 1(c): (Top) The simulated sensor measurements from the model with $A = 2.5$, $w = 2\pi/60$ and the filtered estimate at every time point using the optimal filter equations. (Bottom) The difference between the measurements and the filtered estimate. The mean-square-error is $0.63$ in this case. }
+	\end{center}
+	\label{fig:q1c}
+\end{figure}
+
+We simulated 1000 sensor measurements and then implemented the optimal filter from part (b) and the traces are shown in the top of Fig. 1. The difference between the measurements and filtered estimates is shown in the bottom of Fig. 1 with the mean-square-error of $0.63$.  
+
+
+
+\subsection*{1(d)}
+
+We repeated the process of part (c) for 50 times and found the mean-square-error of the filtered estimate to be $0.623$ with standard deviation of $0.036$. The low standard deviation suggests that the optimal filter is stable. We also found that the mean-square-error increases with smaller amplitude $A$ because the noise is on the same scale and the Markov Chain becomes difficult to uncover.  
+
+
+
+
 
 
 
