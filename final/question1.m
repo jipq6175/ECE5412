@@ -1,6 +1,6 @@
 % Question 1
 
-%% Question 1(c)()
+%% Question 1(c)
 
 A = 2.5; 
 w = 2*pi/60; 
@@ -81,3 +81,7 @@ display(std(mse_filter));
 display('Smoother MSE = ');
 display(mean(mse_smoother));
 display(std(mse_smoother));
+
+
+
+%% Question 1(h)

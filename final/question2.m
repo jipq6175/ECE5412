@@ -43,12 +43,42 @@ hold off;
 legend('MH Simulation', 'True CDF');
 title('CDF');
 
-%%
+% assign v = x for part c
+v = x;
+
+%% Question 2(c)
+
+rng('default');
+n = 1000; 
+x0 = 2.0; % initial state of x
+x = [x0; zeros(n, 1)];
+% Generate 1000 x and y
+for i = 2:n+1
+    x(i) = x(i-1) + randn();
+end
+y = x + randsample(v, n+1, true);
 
 
+% apply the kalman filter
+y_hat = q2kf(y, std(v)^2); 
+error = y - y_hat; 
 
+display('MSE of Kalman Filter = ');
+display(mean(error.^2)); 
 
+% for plotting
+figure(2); 
+subplot(2,1,1);
+hold all;
+plot(1:1:n, y(2:end), 'LineWidth', 1.5);
+plot(1:1:n, y_hat(2:end), 'g-', 'LineWidth', 2.0);
+hold off;
+xlim([0, 1000]); 
+legend('Measurement', 'KF Estimate'); 
+title('Measurement/KF Filter')
 
-
-
-
+subplot(2,1,2);
+hold all;
+plot(1:1:n, zeros(n, 1), 'k-', 'LineWidth', 2.0);
+plot(1:1:n, error(2:end), 'r.', 'MarkerSize', 15.0);
+title('Error')

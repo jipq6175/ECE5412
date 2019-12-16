@@ -106,7 +106,12 @@ We implemented the smoother and filter on the same data to compare the MSE of bo
 We repeated the process of part (e) for 50 times and found the mean-square-error (MSE) of the smoother to be $0.591$ with standard deviation of $0.038$. The MSE of the smoother is smaller than that of the optimal filter. 
 
 
+\subsection*{1(g)}
 
+
+
+
+\subsection*{1(h)}
 
 
 
@@ -124,7 +129,6 @@ We repeated the process of part (e) for 50 times and found the mean-square-error
 		\includegraphics[width=6.5in]{q2a.png}
 		\caption{Question 2(a): The PDF and CDF from Metropolis-Hastings simulation and true function. }
 	\end{center}
-	\label{fig:q2a}
 \end{figure}
 
 We would like to simulate the following PDF using the random-walk Metropolis-Hastings (MH) algorithm. 
@@ -140,9 +144,42 @@ r = \frac{\cos^2(x_{k+1})\sin^2(2x_{k+1})\psi(x_{k+1})}{\cos^2(x_k)\sin^2(2x_k)\
 \end{equation}
 \item Generate $u\sim [0,1]$ and accept $x_{k+1}$ if $u < r$ or go back to step 1. 
 \end{enumerate}
-The simulated PDF and CDF are shown in Fig. \ref{fig:q2a}. 
+The simulated PDF and CDF are shown in Fig. 3. 
 
 
+
+\subsection*{2(b)}
+
+The state model is given as follows. 
+\begin{equation}
+\begin{split}
+x[k+1] & = x[k] + w[k], \quad w[k]\sim\mathcal{N}(0,1)\\
+y[k] & = x[k] + \left(v[k] - \mu \right), \quad \mu = E\{v[k]\}
+\end{split}
+\end{equation}
+where the noise $v[k]$ is given by part (a). Notice that the PDF in (a) is an even function so $\mu =  E\{v[k]\} = 0$. We will apply the Kalman Filter (KF) to the system. 
+
+Following the notation in class, since $A_k = C_k = Q_k = 1$ and $f_k = g_k = 0$, we have 
+\begin{equation}
+y_{k+1|k} = \hat{x}_{k+1|k} = \hat{x}_k
+\end{equation}
+Let the variance of $v[k]$ be $R_{k}=\sigma^2$ and the KF equations are the following. 
+\begin{equation}
+\begin{split}
+\hat{x}_{k+1} & = \hat{x}_k + \frac{1 + \Sigma_k}{1 + \sigma^2 + \Sigma_k}\left( y_{k+1} - \hat{x}_k \right) \\
+\Sigma_{k+1} & = 1 + \Sigma_k - \frac{(1 + \Sigma_k)^2}{1 + \sigma^2 + \Sigma_k}
+\end{split}
+\end{equation}
+
+
+\subsection*{2(c)}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=6.5in]{q2c.png}
+		\caption{Question 2(c): }
+	\end{center}
+\end{figure}
 
 
 
