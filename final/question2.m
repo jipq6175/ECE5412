@@ -112,5 +112,7 @@ hold off;
 set(gca, 'xscale', 'log');
 xlabel('Number of Particles');
 legend('MSE of Particle Filter', 'Kalman Filter from (b)');
-ylim([0.1, 0.4])
+ylim([0.0, 0.5]);
+xlim([100, 350000]);
+title('MSE')
 
