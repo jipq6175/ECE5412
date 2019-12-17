@@ -85,14 +85,79 @@ display(std(mse_smoother));
 
 
 %% Question 1(h)
+
+%% experiment 1
 rng('default'); 
 A = 2.5; 
 w = 2*pi/60; 
 n = 1000;
 y = q1generate(A, w, n);
+maxiter = 200; 
+tol = 0.005; 
+nexp = 5; 
+guess = [-5; -1; 3; 5; 10];
+stop1 = zeros(nexp, 1);
+exp1 = zeros(maxiter, 2*nexp);
+for i = 1:nexp
+    st = q1em(y, guess(i), w, maxiter, tol);
+    stop1(i) = size(st, 1);
+    exp1(1:stop1(i), (2*i-1):(2*i)) = st; 
+end
+
+%% experiment 2
+
+rng('default'); 
+A = 12.4; 
+w = 2*pi/60; 
+n = 1000;
+y = q1generate(A, w, n);
+maxiter = 200; 
+tol = 0.005; 
+nexp = 5; 
+guess = [-5; 1; 7; 15; 21];
+stop2 = zeros(nexp, 1);
+exp2 = zeros(maxiter, 2*nexp);
+for i = 1:nexp
+    st = q1em(y, guess(i), w, maxiter, tol);
+    stop2(i) = size(st, 1);
+    exp2(1:stop2(i), (2*i-1):(2*i)) = st; 
+end
 
 
+%% plotting
+figure(4);
+subplot(2,2,1);
+hold all;
+for i = 1:nexp
+    plot(1:1:stop1(i), exp1(1:stop1(i), 2*i-1), 'LineWidth', 3.0); 
+end
+plot(1:1:max(stop1), 2.5*ones(max(stop1), 1), 'k-', 'LineWidth', 1.5);
+hold off;
+title('A traces'); 
 
+subplot(2,2,2);
+hold all;
+for i = 1:nexp
+    plot(1:1:stop1(i), exp1(1:stop1(i), 2*i), 'LineWidth', 3.0); 
+end
+hold off;
+title('Log-likelihood traces'); 
 
+subplot(2,2,3);
+hold all;
+for i = 1:nexp
+    plot(1:1:stop2(i), exp2(1:stop2(i), 2*i-1), 'LineWidth', 3.0); 
+end
+plot(1:1:max(stop2), 12.4*ones(max(stop2), 1), 'k-', 'LineWidth', 1.5);
+hold off;
+title('A traces'); 
+
+subplot(2,2,4);
+hold all;
+for i = 1:nexp
+    plot(1:1:stop2(i), exp2(1:stop2(i), 2*i), 'LineWidth', 3.0); 
+end
+hold off;
+title('Log-likelihood traces'); 
 
 

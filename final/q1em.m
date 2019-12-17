@@ -14,9 +14,9 @@ result = zeros(maxiter, 2);
 display(sprintf('-------  EM Algorithm: A0 = %0.4f  -------', A));
 display('=================================================');
 i = 1; 
-v = 100.0;
+v = Inf;
 mva = round(maxiter * 0.1);
-while ((i <= maxiter) || (v < tol))
+while ((i <= maxiter) && (v > tol))
     
     % E-Step on E(x|Y_N)
     est = q1smoother(y, A, w) - A * sine;
@@ -28,13 +28,13 @@ while ((i <= maxiter) || (v < tol))
     result(i, 1) = A; 
     result(i, 2) = sum(log(normpdf(y - est - A * sine)));
     
-    % Display the iterations
-    display(sprintf('--- Iteration %4d: A = %0.4f, LL = %0.4f ...', i, A, result(i, 2)));
-    
     % Calculate the stopping criterion
     if i > mva
         v = var(result((i-mva):i, 2));
     end
+    
+    % Display the iterations
+    display(sprintf('--- Iteration %3d: A = %0.3f, LL = %0.3f, v = %0.3f ...', i, A, result(i, 2), v));
     
     i = i + 1; 
 end
