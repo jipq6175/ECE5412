@@ -85,3 +85,14 @@ display(std(mse_smoother));
 
 
 %% Question 1(h)
+rng('default'); 
+A = 2.5; 
+w = 2*pi/60; 
+n = 1000;
+y = q1generate(A, w, n);
+
+
+
+
+
+
