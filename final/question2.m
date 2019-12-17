@@ -87,6 +87,27 @@ title('Error Percentage')
 
 
 
-%% Question 2(d)
+%% Question 2(e)
+% simulations using different number of particles
+numparticles = round(100 * 1.5.^(0:20));
+mse = zeros(length(numparticles), 1);
+pvar = zeros(length(numparticles), 1);
 
+% might take a while
+tic();
+for i = 1:length(numparticles)
+    pf = q2pf(y, numparticles(i)); 
+    mse(i) = mean((y - pf(:,1)).^2);
+    pvar(i) = mean(pf(:,2));
+end
+toc();
 
+% plotting
+figure(3);
+hold all;
+plot(numparticles, mse, 'b-', 'LineWidth', 3.0);
+plot(numparticles, pvar, 'r-', 'LineWidth', 3.0);
+hold off;
+set(gca, 'xscale', 'log');
+xlabel('Number of Particles');
+legend('MSE of Particle Filter', 'Mean Variance of Particles')
