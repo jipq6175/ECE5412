@@ -1,7 +1,7 @@
 % Question 1
 
 %% Question 1(c)
-
+rng('default')
 A = 2.5; 
 w = 2*pi/60; 
 n = 1000;
