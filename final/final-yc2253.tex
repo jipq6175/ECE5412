@@ -149,13 +149,11 @@ A^{I+1} = \text{arg}\max_{A} Q(A, A^I) \iff \frac{dQ}{dA}\Bigg|_{A^{I+1}}=0
 \frac{dQ}{dA} = 0 = -A\sum_{i=1}^N\sin^2(\omega i) + \sum_{i=1}^Ny_i\sin(\omega i) - \sum_{i=1}^N E\left(x_i\middle| Y_N, A^I \right)\sin(\omega i)
 \end{equation}
 \begin{equation}
-A^{I+1} = \frac{\sum_{i=1}^Ny_i\sin(\omega i) - \sum_{i=1}^N E\left(x_i\middle| Y_N, A^I \right)\sin(\omega i)}{\sum_{i=1}^N\sin^2(\omega i)}
+A^{I+1} = \frac{\sum_{i=1}^N\left[ y_i - E\left(x_i\middle| Y_N, A^I \right)\right]\sin(\omega i) }{\sum_{i=1}^N\sin^2(\omega i)}
 \end{equation}
 \end{enumerate}
 
-The \textit{E-Step} is to compute the state estimate $E\left(x_i\middle| Y_N, A^I \right)$ using the smoother while the \textit{M-Step} updates the parameter $A$ by Eq. (15). 
-
-
+The \textit{E-Step} is to compute the state estimate $E\left(x_i\middle| Y_N, A^I \right)$ using the smoother while the \textit{M-Step} updates the parameter $A$ by Eq. (15). Note that although the full knowledge of the transition probability $P$ seems irrelevant in the EM algorithm, it appears heavily in computing the state estimate $E\left(x_i\middle| Y_N, A^I \right)$.
 
 
 \subsection*{1(h)}
