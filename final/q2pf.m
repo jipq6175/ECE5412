@@ -18,11 +18,13 @@ for i = 1:n
     % Sampling Importance Resampling
     t = x - y(i);
     w = cos(t).^2 .* sin(2*t).^2 .* normpdf(t); 
+    % conditional mean
+    result(i, 2) = w' * x / sum(w);
     idx = randsample(N, N, true, w); 
     x = x(idx); 
     
-    % Use unconditional mean for estimate
-    result(i, :) = [mean(x) var(x)];
+    % Use unconditional mean 
+    result(i, 1) = mean(x);
 end
 end
 

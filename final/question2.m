@@ -98,21 +98,21 @@ tic();
 for i = 1:length(numparticles)
     pf = q2pf(y, numparticles(i)); 
     mse(i, :) = [mean((y - pf(:,1)).^2) std((y - pf(:,1)).^2)];
-    pvar(i) = mean(pf(:,2));
+    pvar(i) = mean((y - pf(:,2)).^2);
 end
 toc(); % ~280 seconds
 
 %% plotting
 figure(3);
 hold all;
-plot(numparticles, mse(:,1), 'b.', 'MarkerSize', 15.0);
-%plot(numparticles, pvar, 'r-', 'LineWidth', 3.0);
+plot(numparticles, mse(:,1), 'b.', 'MarkerSize', 25.0);
+plot(numparticles, pvar, 'rx', 'MarkerSize', 15.0, 'LineWidth', 2.0);
 plot(numparticles, 0.23*ones(length(numparticles), 1), 'k-', 'LineWidth', 2.0);
 hold off;
 set(gca, 'xscale', 'log');
 xlabel('Number of Particles');
-legend('MSE of Particle Filter', 'Kalman Filter from (b)');
-ylim([0.0, 0.5]);
+legend('MSE of Particle Filter (unconditional)', 'MSE of Particle Filter (conditional)','Kalman Filter from (b)');
+ylim([0.2, 0.4]);
 xlim([100, 350000]);
 title('MSE')
 

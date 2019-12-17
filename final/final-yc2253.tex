@@ -187,7 +187,7 @@ We simulated $y[k]$ where $k=1,2,\dots,1000$ and applied the Kalman Filter deriv
 
 \subsection*{2(d)}
 
-The Kalman Filter estimate is the best linear unbiased estimator (BLUE) for non-Gaussian noise. 
+The Kalman Filter estimate is the best linear unbiased estimator (BLUE) for non-Gaussian noise. In this case, if noise $v[k]$ is iid Gaussian, the Kalman Filter is the optimal filter. However, $v[k]$ is constructed from $\mathcal{N}(0,1)$ as a zero-mean noise with a smaller variance. The Kalman Filter approximates this iid non-Gaussian noise with $\mathcal{N}(0, \text{var}(v[k]))$. There might be other non-linear optimal filters with better performance but the Kalman Filter is the best linear filter in this case. 
 
 
 
@@ -196,12 +196,29 @@ The Kalman Filter estimate is the best linear unbiased estimator (BLUE) for non-
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=4.5in]{q2e.png}
-		\caption{Question 2(e): The MSE of particle filter estimate with different number of particles $N$ compared to the MSE of Kalman Filter in (b). }
+		\caption{Question 2(e): The MSE of particle filter using both conditional and unconditional estimate with different number of particles $N$ compared to the MSE of Kalman Filter in (b). }
 	\end{center}
 \end{figure}
 
+The bootstrap particle filter is implemented using the following steps. Suppose we can sample $N$ particles from the distribution $x^{(i)}[k]\sim p(x[k]|y[1:k])$, our goal is to obtain the samples $x^{(i)}[k+1]\sim p(x[k+1]|y[1:k+1])$ using the state space model defined in part (b).
+\begin{enumerate}
+\item Sample $x^{(i)} \sim \mathcal{N}(x^{(i)}[k], 1)$
+\item Calculate the weights $w^{(i)} = p(y[k+1]|x^{(i)})$, where 
+\begin{equation}
+p(y|x) = \pi(y-x) \propto \cos^2(y-x)\sin^2(2(y-x))\psi(y-x)
+\end{equation} 
+\item Sample $1:N$ according to the weights $w^{(i)}$, $I^{(i)}\sim w^{(i)}$
+\item The new particles $x^{(i)}[k+1] = x^{(I^{(i)})} \sim p(x[k+1]|y[1:k+1])$
+\item The estimate of $x[k+1]$ can be unconditional or conditional:
+\begin{equation}
+\begin{split}
+\text{unconditional} & \quad\hat{x}[k+1] = E(x[k+1]|y[1:k+1]) \approx \frac{1}{N}\sum_{i=1}^N x^{(i)}[k+1]\\
+\text{conditional} & \quad\hat{x}[k+1] = E(x[k+1]|y[1:k+1]) \approx \frac{\sum_{i=1}^N w^{(i)}x^{(i)}[k+1]}{\sum_{i=1}^N w^{(i)}}\\
+\end{split}
+\end{equation} 
+\end{enumerate}
 
-
+The bootstrap particle filter is implemented on the same data generated from the state space model with varying number of particles from $100$ to $3.3\times 10^5$. We show the conditional and unconditional MSE in Fig. 5 and the horizontal line is the MSE of the Kalman Filter. The difference between both estimate becomes subtle as number of particles increases. As the number of particles reaches above $3000$, the MSE is no longer improved. Compared to the performance of Kalman Filter, the bootstrap particle filter is slightly worse even with much more computational cost.
 
 
 
