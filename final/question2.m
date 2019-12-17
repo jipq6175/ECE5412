@@ -79,6 +79,14 @@ title('Measurement/KF Filter')
 
 subplot(2,1,2);
 hold all;
-plot(1:1:n, zeros(n, 1), 'k-', 'LineWidth', 2.0);
-plot(1:1:n, error(2:end), 'r.', 'MarkerSize', 15.0);
-title('Error')
+
+plot(error(2:end)/y_hat(2:end)*100, 'r.', 'MarkerSize', 15.0);
+plot(zeros(n, 1), 'k-', 'LineWidth', 2.0);
+title('Error Percentage')
+
+
+
+
+%% Question 2(d)
+
+

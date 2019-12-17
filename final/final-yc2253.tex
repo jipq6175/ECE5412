@@ -177,9 +177,21 @@ Let the variance of $v[k]$ be $R_{k}=\sigma^2$ and the KF equations are the foll
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=6.5in]{q2c.png}
-		\caption{Question 2(c): }
+		\caption{Question 2(c): (Top) The traces of the simulated $y[k]$ and KF estimate. (Bottom) The error percentage of the KF estimate. The error is at most $4\%$. The MSE is 0.23. }
 	\end{center}
 \end{figure}
+
+We simulated $y[k]$ where $k=1,2,\dots,1000$ and applied the Kalman Filter derived in part (b) to the $y$'s. Although the noise $v[k]$ is not Gaussian, we approximate it with a Gaussian with zero mean and empirical variance $\text{Var}(v[k]) = 0.71$. The traces of simulated measurements ($y[k]$) and KF estimate are shown in the top panel of Fig. 4. The error percentage is shown in the bottom of Fig. 4, with maximum error percentage less than $4\%$. The MSE of the KF estimate is found to be $0.23$. 
+
+
+
+\subsection*{2(d)}
+
+The Kalman Filter estimate is the best linear unbiased estimator (BLUE) for non-Gaussian noise. 
+
+
+
+\subsection*{2(e)}
 
 
 
