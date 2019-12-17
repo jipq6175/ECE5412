@@ -14,7 +14,7 @@
 \normalsize ECE 5412 \hfill yc2253@cornell.edu \\
 Fall 2019 \hfill Due: 12/20/19 11 am\\
 
-To make the notation consistent and clear, we (I) will use $x_k$ instead of $x_k$ to denote the random variable $x$ at time $k$. 
+To make the notation consistent and clear, we (I) will use $x_k$ instead of $x[k]$ to denote the random variable $x$ at time $k$. 
 
 \section*{Question 1}
 
@@ -158,10 +158,19 @@ The \textit{E-Step} is to compute the state estimate $E\left(x_i\middle| Y_N, A^
 
 \subsection*{1(h)}
 
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=7in]{q1h.png}
+		\caption{Question 1(h): Traces of $A^I$ and log-likelihood of two experiments using 5 different starting values. }
+	\end{center}
+\end{figure}
 
 
-
-
+We implemented the EM algorithm described above to obtain the maximum likelihood estimator of the amplitude $A$. The EM algorithm stops after the log-likelihood values stabilize. We use the variance of the latest $m$ iterations as the stopping criteria, where $m$ is chosen to be $10\%$ of the maximum iterations, $200$. The log-likelihood is as follows. 
+\begin{equation}
+\log p(Y_N|A) = -\frac{N}{2}\log(2\pi) - \frac{1}{2}\sum_{i=1}^N \left[y_i - E\left(x_i\middle| Y_N, A^I \right) - A\sin(\omega i) \right]^2
+\end{equation}
+We conducts two experiments with different $A$ values using 5 initial guesses. The traces of $A^I$ and log-likelihood versus iteration are shown in Fig. 2. The EM algorithm in this case converges fast (within 10 iterations) because it only involves estimation of one parameter. The log-likelihood is increasing with iterations as expected. The initialization of $A$ does not play an important role here since this is just the 1D case. In higher dimensions, EM algorithm might be stuck at local maximum of the rugged likelihood landscape. 
 
 
 

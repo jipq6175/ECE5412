@@ -131,7 +131,7 @@ hold all;
 for i = 1:nexp
     plot(1:1:stop1(i), exp1(1:stop1(i), 2*i-1), 'LineWidth', 3.0); 
 end
-plot(1:1:max(stop1), 2.5*ones(max(stop1), 1), 'k-', 'LineWidth', 1.5);
+%plot(1:1:max(stop1), 2.5*ones(max(stop1), 1), 'k-', 'LineWidth', 1.5);
 hold off;
 title('A traces'); 
 
@@ -148,7 +148,7 @@ hold all;
 for i = 1:nexp
     plot(1:1:stop2(i), exp2(1:stop2(i), 2*i-1), 'LineWidth', 3.0); 
 end
-plot(1:1:max(stop2), 12.4*ones(max(stop2), 1), 'k-', 'LineWidth', 1.5);
+%plot(1:1:max(stop2), 12.4*ones(max(stop2), 1), 'k-', 'LineWidth', 1.5);
 hold off;
 title('A traces'); 
 
