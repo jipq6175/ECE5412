@@ -63,6 +63,7 @@ y = x + randsample(v, n+1, true);
 y_hat = q2kf(y, std(v)^2); 
 error = y - y_hat; 
 
+% show the statistics
 display('MSE of Kalman Filter = ');
 display(mean(error.^2)); 
 
@@ -89,13 +90,14 @@ title('Error Percentage')
 
 %% Question 2(e)
 % simulations using different number of particles
-numparticles = round(100 * 1.5.^(0:20));
-mse = zeros(length(numparticles), 2);
-pvar = zeros(length(numparticles), 1);
+numparticles = round(100 * 1.5.^(0:20)); % the particle number grows exponentially
+mse = zeros(length(numparticles), 2); % container for uncondisitonal mse 
+pvar = zeros(length(numparticles), 1); % container for conditional mse
 
 % might take a while
 tic();
 for i = 1:length(numparticles)
+    % apply the particle filter
     pf = q2pf(y, numparticles(i)); 
     mse(i, :) = [mean((y - pf(:,1)).^2) std((y - pf(:,1)).^2)];
     pvar(i) = mean((y - pf(:,2)).^2);

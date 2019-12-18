@@ -4,7 +4,7 @@ function result = q1filter(y, A, w, p0)
 
 n = length(y); 
 p = [p0; zeros(n, 1)]; 
-sine = A * sin(w * (1:1:n))';
+sine = A * sin(w * (1:1:n))'; % precompute the sine wave
 
 % filtering at every time point
 for i = 1:n

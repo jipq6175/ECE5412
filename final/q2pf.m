@@ -15,7 +15,7 @@ for i = 1:n
     % sample from p(x_{k+1}|x_k)
     x = x + randn(N, 1);
     
-    % Sampling Importance Resampling
+    % Sampling Importance Resampling, vectorize
     t = x - y(i);
     w = cos(t).^2 .* sin(2*t).^2 .* normpdf(t); 
     % conditional mean

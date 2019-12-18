@@ -3,7 +3,7 @@
 function result = q1em(y, A0, w, maxiter, tol)
 
 n = length(y); 
-sine = sin(w * (1:1:n))';
+sine = sin(w * (1:1:n))'; % precompute the sine wave
 
 A = A0; 
 

@@ -36,14 +36,16 @@ title('Error');
 %% Question 1(d)
 
 nsim = 50;
+% container for mse
 mse = zeros(nsim, 1);
+% repeat what's done in part (a)
 for i = 1:nsim
     y = q1generate(A, w, n);
     y_hat = q1filter(y, A, w, rand());
     error = y - y_hat; 
     mse(i) = mean(error.^2);
 end
-
+% show the statistics
 display(mean(mse));
 display(std(mse));
 
@@ -63,6 +65,8 @@ display(mean((y - y_smooth).^2));
 
 %% Question 1(f)
 % might take a while to run
+
+% compare the smoother with the optimal filter
 mse_filter = zeros(nsim, 1);
 mse_smoother = zeros(nsim, 1);
 tic();
@@ -75,6 +79,7 @@ for i = 1:nsim
 end
 toc(); % about 250 seconds
 
+% show the statistics
 display('Filter MSE = ');
 display(mean(mse_filter));
 display(std(mse_filter));
@@ -86,18 +91,20 @@ display(std(mse_smoother));
 
 %% Question 1(h)
 
-%% experiment 1
+%% experiment 1 on EM algorithm
+
 rng('default'); 
 A = 2.5; 
 w = 2*pi/60; 
 n = 1000;
 y = q1generate(A, w, n);
-maxiter = 200; 
-tol = 0.005; 
+maxiter = 200; % max iteration of the algorithm
+tol = 0.005; % early stopping when log-likelihood stabilizes
 nexp = 5; 
-guess = [-5; -1; 3; 5; 10];
-stop1 = zeros(nexp, 1);
-exp1 = zeros(maxiter, 2*nexp);
+guess = [-5; -1; 3; 5; 10]; % different initial A
+stop1 = zeros(nexp, 1); % get the dims for the ease of plotting
+exp1 = zeros(maxiter, 2*nexp); % container for EM statistics
+% takes a while but you will see the progress
 for i = 1:nexp
     st = q1em(y, guess(i), w, maxiter, tol);
     stop1(i) = size(st, 1);
@@ -105,7 +112,7 @@ for i = 1:nexp
 end
 
 %% experiment 2
-
+% exactly the same thing as exp 1 with different A
 rng('default'); 
 A = 12.4; 
 w = 2*pi/60; 

@@ -4,7 +4,7 @@ function result = q1smoother(y, A, w)
 
 n = length(y);
 p = zeros(n, 1);
-sine = A * sin(w * (1:1:n))';
+sine = A * sin(w * (1:1:n))'; % precompute the sine wave
 
 for i = 1:n
     
@@ -30,5 +30,7 @@ for i = 1:n
     p(i) = pf1 * pb1 / (pf1 * pb1 + (1-pf1)*(1-pb1));
 end
 
+% the y_hat, the smoother estimate of the measurement.
+% if one wants to get the state estimate, subtract the known sine wave
 result = sine + 2 * p - 1;
 end
