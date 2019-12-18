@@ -277,5 +277,8 @@ p(y|x) = \pi(y-x) \propto \cos^2(y-x)\sin^2(2(y-x))\psi(y-x)
 The bootstrap particle filter is implemented on the same data generated from the state space model with varying number of particles from $100$ to $3.3\times 10^5$. We show the conditional and unconditional MSE in Fig. 5 and the horizontal line is the MSE of the Kalman Filter. The difference between both estimate becomes subtle as number of particles increases. As the number of particles reaches above $3000$, the MSE is no longer improved. Compared to the performance of Kalman Filter, the bootstrap particle filter is slightly worse even with much more computational cost.
 
 
+\section*{Notes on Codes}
+The codes are written as MATLAB functions. The MATLAB scripts \textit{question1.m} and \textit{question2.m} contains sections that should reproduce all the plots and numbers here with sufficient comments. The rest of the files should be in the same directory. Comments are also included in the MATLAB functions.  
+
 
 \end{document}
